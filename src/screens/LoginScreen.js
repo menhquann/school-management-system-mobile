@@ -1,28 +1,44 @@
 import { useNavigation } from '@react-navigation/core'
 import axios from "axios";
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-// import { 
+// import { AsyncStorage } from '@react-native-community/async-strorage';
 
+import AuthContext from '../context/AuthProvider';
+axios.defaults.baseURL = "http://ndkiet.us-east-1.elasticbeanstalk.com/api/";
 const LoginScreen = () => {
-  const [email, setEmail] = useState('')
+  const { setAuth } = useContext(AuthContext);
+  const [username, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const navigation = useNavigation()
 
 
   const handleLogin = async (e) => {
-    // const { data } = await axios.post(
-    //   "login",
-    //   {
-    //     username,
-    //     password,
-    //   },
-    //   { withCredentials: true }
-    // );
-    // console.log({ data });
+    e.preventDefault();
+    console.log(username)
+    console.log(password)
+    const { data } = await axios.post(
+      "login",
+      {
+        username,
+        password,
+      }
+
+    );
+
+    console.log({ data });
+
+    setAuth({ data });
+    // 
+
+    // setNavigate(lg);w
+
+
+
     navigation.replace("Home")
-  }
+  };
+
 
   return (
     <KeyboardAvoidingView
@@ -33,7 +49,7 @@ const LoginScreen = () => {
 
         <TextInput
           placeholder="User"
-          value={email}
+          value={username}
           onChangeText={text => setEmail(text)}
           style={styles.input}
         />

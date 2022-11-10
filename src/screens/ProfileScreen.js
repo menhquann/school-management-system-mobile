@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import axios from 'axios';
+import React, { Component, useContext, useEffect, useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -11,6 +12,7 @@ import {
 } from 'react-native-paper';
 
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
+import AuthContext from '../context/AuthProvider';
 
 
 // Example component for section:headerComponent
@@ -20,56 +22,103 @@ const CustomSectionHeader = () => (
     </View>
 );
 export default function ProfileScreen() {
+    const { auth } = useContext(AuthContext)
+    axios.defaults.baseURL = "http://ndkiet.us-east-1.elasticbeanstalk.com/api/";
+    const token = auth.data.access_token
 
-    const mockData = {
-        "userId": 68,
-        "username": "student1@thpthoanghoatham",
-        "lastName": "Nguyen Tran",
-        "firstName": "Minh Quan",
-        "displayName": "Nguyen Tran Minh Quan",
-        "phone": "123411",
-        "email": "ntmquan@gmail.com",
-        "avatar": null,
-        "gender": true,
-        "dateOfBirth": "2001-10-10",
-        "placeOfBirth": "Hue",
-        "nationality": "",
-        "street": "Ngo Si Lien",
-        "district": "Quan Lien Chieu",
-        "city": "Thanh pho Da Nang",
-        "job": "",
-        "role": "STUDENT",
-        "schoolId": 5,
-        "schoolName": "THPT Hoang Hoa Tham",
-        "studentId": "student1",
-        "teacherId": ""
-    }
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [displayName, setDisplayName] = useState("");
+    const [schoolName, setSchoolName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [email, setEmail] = useState("");
+    const [gender, setGender] = useState(true);
+    const [dateOfBirth, setDateOfBirth] = useState("");
+    const [placeOfBirth, setPlaceOfBirth] = useState("");
+    const [nationality, setNationality] = useState("");
+    const [street, setStreet] = useState("");
+    const [district, setDistrict] = useState("");
+    const [city, setCity] = useState("");
+
+
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data } = await axios.get("users");
+                console.log({ data })
+                setFirstName(data.data.user.firstName);
+                setLastName(data.data.user.lastName);
+                setDisplayName(data.data.user.displayName);
+                setSchoolName(data.data.user.schoolName);
+                setPhone(data.data.user.phone);
+                setEmail(data.data.user.email);
+                setGender(data.data.user.gender);
+                setDateOfBirth(data.data.user.dateOfBirth);
+                setPlaceOfBirth(data.data.user.placeOfBirth);
+                setNationality(data.data.user.nationality);
+                setStreet(data.data.user.street);
+                setDistrict(data.data.user.district);
+                setCity(data.data.user.city);
+
+            } catch (e) { }
+        })();
+    }, []);
+
+
+    // const mockData = {
+    //     "userId": 68,
+    //     "username": "student1@thpthoanghoatham",
+    //     "lastName": "Nguyen Tran Minh",
+    //     "firstName": "Quan",
+    //     "displayName": "Nguyen Tran Minh Quan",
+    //     "phone": "123411",
+    //     "email": "ntmquan@gmail.com",
+    //     "avatar": null,
+    //     "gender": true,
+    //     "dateOfBirth": "2001-10-10",
+    //     "placeOfBirth": "Hue",
+    //     "nationality": "",
+    //     "street": "Ngo Si Lien",
+    //     "district": "Quan Lien Chieu",
+    //     "city": "Thanh pho Da Nang",
+    //     "job": "",
+    //     "role": "STUDENT",
+    //     "schoolId": 5,
+    //     "schoolName": "THPT Hoang Hoa Tham",
+    //     "studentId": "student1",
+    //     "teacherId": ""
+    // }
+
+
     return (
         <>
             <View style={styles.userInfoSection}>
+
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                    <Avatar.Text size={80} label="XD" />
+                    <Avatar.Text size={80} label={lastName[0] + firstName[0]} />
                     <View style={{ marginLeft: 20 }}>
                         <Title style={[styles.title, {
                             marginTop: 15,
                             marginBottom: 5,
-                        }]}>John Doe</Title>
-                        <Caption style={styles.caption}>@j_doe</Caption>
+                        }]}>{displayName}</Title>
+                        <Caption style={styles.caption}>{schoolName}</Caption>
                     </View>
                 </View>
             </View>
             <TableView appearance="light">
                 <Section headerComponent={<CustomSectionHeader />}>
-                    <Cell cellStyle="RightDetail" title="Họ và tên" detail={mockData.displayName} />
-                    <Cell cellStyle="RightDetail" title="Số điện thoại" detail={mockData.phone} />
-                    <Cell cellStyle="RightDetail" title="Email" detail={mockData.email} />
-                    <Cell cellStyle="RightDetail" title="Giới tính" detail={mockData.gender ? "Nam" : "Nữ"} />
-                    <Cell cellStyle="RightDetail" title="Ngày sinh" detail={mockData.dateOfBirth} />
-                    <Cell cellStyle="RightDetail" title="Nơi sinh" detail={mockData.placeOfBirth} />
-                    <Cell cellStyle="RightDetail" title="Quốc tịch" detail={mockData.nationality} />
-                    <Cell cellStyle="RightDetail" title="Đường" detail={mockData.street} />
-                    <Cell cellStyle="RightDetail" title="Quận/Huyện" detail={mockData.district} />
-                    <Cell cellStyle="RightDetail" title="Tỉnh/Thành phố" detail={mockData.city} />
+                    <Cell cellStyle="RightDetail" title="Họ và tên" detail={displayName} />
+                    <Cell cellStyle="RightDetail" title="Số điện thoại" detail={phone} />
+                    <Cell cellStyle="RightDetail" title="Email" detail={email} />
+                    <Cell cellStyle="RightDetail" title="Giới tính" detail={gender ? "Nam" : "Nữ"} />
+                    <Cell cellStyle="RightDetail" title="Ngày sinh" detail={dateOfBirth} />
+                    <Cell cellStyle="RightDetail" title="Nơi sinh" detail={placeOfBirth} />
+                    <Cell cellStyle="RightDetail" title="Quốc tịch" detail={nationality} />
+                    <Cell cellStyle="RightDetail" title="Đường" detail={street} />
+                    <Cell cellStyle="RightDetail" title="Quận/Huyện" detail={district} />
+                    <Cell cellStyle="RightDetail" title="Tỉnh/Thành phố" detail={city} />
 
                     {/* <Section headerComponent={<CustomSectionHeader />}> */}
                 </Section>
