@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component, useContext, useEffect, useState } from 'react';
 import {
+    ScrollView,
     StyleSheet,
     Text,
     View,
@@ -8,7 +9,7 @@ import {
 import {
     Avatar,
     Title,
-    Caption,
+    Caption
 } from 'react-native-paper';
 
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
@@ -18,7 +19,7 @@ import AuthContext from '../context/AuthProvider';
 // Example component for section:headerComponent
 const CustomSectionHeader = () => (
     <View >
-        <Text style={styles.text}>Thông tin chung</Text>
+        <Text style={styles.textHeader}>Thông tin chung</Text>
     </View>
 );
 export default function ProfileScreen() {
@@ -94,46 +95,57 @@ export default function ProfileScreen() {
 
     return (
         <>
-            <View style={styles.userInfoSection}>
+            <ScrollView>
+                <View style={styles.userInfoSection}>
 
-                <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                    <Avatar.Text size={80} label={lastName[0] + firstName[0]} />
-                    <View style={{ marginLeft: 20 }}>
-                        <Title style={[styles.title, {
-                            marginTop: 15,
-                            marginBottom: 5,
-                        }]}>{displayName}</Title>
-                        <Caption style={styles.caption}>{schoolName}</Caption>
+                    <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                        <Avatar.Text size={80} label={lastName[0] + firstName[0]} />
+                        <View style={{ marginLeft: 20 }}>
+                            <Title style={[styles.title, {
+                                marginTop: 10,
+                                marginBottom: 5,
+                            }]}>{displayName}</Title>
+                            <Caption style={styles.caption}>{schoolName}</Caption>
+                        </View>
                     </View>
                 </View>
-            </View>
-            <TableView appearance="light">
-                <Section headerComponent={<CustomSectionHeader />}>
-                    <Cell cellStyle="RightDetail" title="Họ và tên" detail={displayName} />
-                    <Cell cellStyle="RightDetail" title="Số điện thoại" detail={phone} />
-                    <Cell cellStyle="RightDetail" title="Email" detail={email} />
-                    <Cell cellStyle="RightDetail" title="Giới tính" detail={gender ? "Nam" : "Nữ"} />
-                    <Cell cellStyle="RightDetail" title="Ngày sinh" detail={dateOfBirth} />
-                    <Cell cellStyle="RightDetail" title="Nơi sinh" detail={placeOfBirth} />
-                    <Cell cellStyle="RightDetail" title="Quốc tịch" detail={nationality} />
-                    <Cell cellStyle="RightDetail" title="Đường" detail={street} />
-                    <Cell cellStyle="RightDetail" title="Quận/Huyện" detail={district} />
-                    <Cell cellStyle="RightDetail" title="Tỉnh/Thành phố" detail={city} />
+                <TableView appearance="light">
+                    <Section headerComponent={<CustomSectionHeader />}>
+                        <Cell cellStyle="RightDetail" title="Họ và tên" detail={displayName} />
+                        <Cell cellStyle="RightDetail" title="Số điện thoại" detail={phone} />
+                        <Cell cellStyle="RightDetail" title="Email" detail={email} />
+                        <Cell cellStyle="RightDetail" title="Giới tính" detail={gender ? "Nam" : "Nữ"} />
+                        <Cell cellStyle="RightDetail" title="Ngày sinh" detail={dateOfBirth} />
+                        <Cell cellStyle="RightDetail" title="Nơi sinh" detail={placeOfBirth} />
+                        <Cell cellStyle="RightDetail" title="Quốc tịch" detail={nationality} />
+                        <Cell cellStyle="RightDetail" title="Đường" detail={street} />
+                        <Cell cellStyle="RightDetail" title="Quận/Huyện" detail={district} />
+                        <Cell cellStyle="RightDetail" title="Tỉnh/Thành phố" detail={city} />
 
-                    {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                </Section>
-            </TableView>
+                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
+                    </Section>
+                </TableView>
+
+            </ScrollView>
+
         </>
 
     );
 }
 const styles = StyleSheet.create({
-    text: {
+    textHeader: {
         backgroundColor: '#EFEFF4',
-        paddingTop: 20,
-        paddingBottom: 20,
+        paddingBottom: 15,
         fontSize: 20,
+        paddingLeft: 12,
         color: '#1F24C4',
     },
+    userInfoSection: {
+        backgroundColor: '#ffffff',
+        paddingTop: 10,
+        paddingBottom: 20,
+        paddingLeft: 20,
+
+    }
 
 });
