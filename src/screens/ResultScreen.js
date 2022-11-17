@@ -210,7 +210,7 @@ const ResultScreen = () => {
                         fontWeight: "bold",
                         color: "#000000"
                     }}>
-                        <Cell cellStyle="RightDetail" title="Miệng:" detail={res} />
+                        <Cell cellStyle="RightDetail" title="Miệng:" detail={res.join(" ")} />
                         <Cell cellStyle="RightDetail" title="15 phút:" detail="Chưa có" />
                         <Cell cellStyle="RightDetail" title="1 tiết:" detail="Chưa có" />
                         <Cell cellStyle="RightDetail" title="Học kì:" detail="Chưa có" />
