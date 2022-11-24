@@ -69,7 +69,7 @@ const LoginScreen = () => {
           onPress={handleLogin}
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText}>Đăng nhập</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
