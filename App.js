@@ -6,7 +6,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import { AuthProvider } from './src/context/AuthProvider';
-import ResultScreen from './src/screens/ResultScreen';
+import MainContainerST from './src/component/MainContainerST';
+import MainContainerTE from './src/component/MainContainerTE';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +30,19 @@ export default function App() {
               fontWeight: 'bold',
             },
 
-          }} name="Home" component={HomeScreen} />
+          }} name="HomeST" component={MainContainerST} />
+          <Stack.Screen options={{
+            title: 'Hệ Thống Quản Lý Trường Học',
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+
+          }} name="HomeTE" component={MainContainerTE} />
         </Stack.Navigator>
       </NavigationContainer>
       {/* </ScrollView> */}

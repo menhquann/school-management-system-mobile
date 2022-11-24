@@ -4,21 +4,21 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
-import ProfileScreen from '../screens/ProfileScreen';
-import ResultScreen from '../screens/ResultScreen';
-import DetailsScreen2 from '../screens/DetailsScreen2';
-import SettingsScreen from '../screens/SettingsScreen';
+import ProfileScreen from '../screens/teacher/ProfileScreen';
+import ResultScreen from '../screens/teacher/ResultScreen';
+import CalendarScreen from '../screens/teacher/CalendarScreen';
+import SettingsScreen from '../screens/teacher/SettingsScreen';
 
 
 //Screen names
 const profileName = "Hồ sơ";
-const resultName = "Điểm";
+const resultName = "Nhập điểm";
 const calendarName = "TKB";
 const settingsName = "Cài đặt";
 
 const Tab = createBottomTabNavigator();
 
-function MainContainer() {
+function MainContainerTE() {
   return (
     // <NavigationContainer>
     <Tab.Navigator
@@ -54,7 +54,7 @@ function MainContainer() {
 
       <Tab.Screen name={profileName} component={ProfileScreen} />
       <Tab.Screen name={resultName} component={ResultScreen} />
-      <Tab.Screen name={calendarName} component={DetailsScreen2} />
+      <Tab.Screen name={calendarName} component={CalendarScreen} />
       <Tab.Screen name={settingsName} component={SettingsScreen} />
 
 
@@ -64,4 +64,4 @@ function MainContainer() {
   );
 }
 
-export default MainContainer;
+export default MainContainerTE;

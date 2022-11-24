@@ -13,7 +13,7 @@ import {
 } from 'react-native-paper';
 
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
-import AuthContext from '../context/AuthProvider';
+import AuthContext from '../../context/AuthProvider';
 
 
 // Example component for section:headerComponent

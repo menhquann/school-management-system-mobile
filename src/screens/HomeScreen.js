@@ -1,8 +1,10 @@
 import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import MainContainerST from '../component/MainContainerST';
 // import { auth } from '../firebase'
-import MainContainer from "../component/MainContainer";
+import AuthContext from '../context/AuthProvider';
+
 
 const HomeScreen = () => {
   const navigation = useNavigation()
@@ -18,7 +20,7 @@ const HomeScreen = () => {
 
   return (
     <>
-      <MainContainer />
+      <MainContainerST />
     </>
 
 
