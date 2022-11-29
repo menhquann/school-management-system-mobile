@@ -14,74 +14,88 @@ import { Cell, Section, TableView } from 'react-native-tableview-simple';
 // import {BASE_URL, API_KEY} from '@env';
 
 const ResultScreen = () => {
-    const [countryData, setCountryData] = useState([]);
-    const [stateData, setStateData] = useState([]);
-    const [cityData, setCityData] = useState([]);
-    const [country, setCountry] = useState(1);
-    const [state, setState] = useState(1);
-    const [city, setCity] = useState(null);
-    const [countryName, setCountryName] = useState("Năm học 2022-2023");
-    const [stateName, setStateName] = useState("Học kì 1");
-    const [cityName, setCityName] = useState(null);
+
+    const [listSchoolYear, setListSchoolYear] = useState([]);
+    const [learningResult, setLearningResult] = useState();
+
+    const [schoolYear, setSchoolYear] = useState(1);
+    const [semester, setSemester] = useState(1);
+    const [schoolYearName, setSchoolYearName] = useState("Năm học 2022-2023");
+    const [semesterName, setSemesterName] = useState("Học kì 1");
+
     const [isFocus, setIsFocus] = useState(false);
+
+    var mapSubjects = {
+        Biological: "Sinh học",
+        Chemistry: "Hóa học",
+        Civic_Education: "Giáo dục công dân",
+        Defense_Education: "Giáo dục quốc phòng",
+        English: "Tiếng Anh",
+        Geographic: "Địa lý",
+        History: "Lịch Sử",
+        Informatics: "Tin học",
+        Literature: "Ngữ văn",
+        Maths: "Toán học",
+        Physic: "Vật lý",
+        Physical_Education: "Thể dục",
+        Technology: "Tin học"
+    }
+    console.log("map", "Civic Education".replace(" ", "_"))
     const data = {
-        country: [
-            { value: 1, label: "Năm học 2022-2023" },
-            { value: 2, label: "Năm học 2021-2022" },
-            { value: 3, label: "Năm học 2020-2021" },
-        ],
-        state: [
-            { value: 1, label: "Học kì 1" },
-            { value: 2, label: "Học kì 2" },
-            { value: 3, label: "Cả năm" },
+        semester: [
+            { value: 0, label: "Học kì 1" },
+            { value: 1, label: "Học kì 2" },
+            { value: 2, label: "Cả năm" },
         ],
     }
 
-    //   axios(config)
-    //     .then(response => {
-    //       console.log(JSON.stringify(response.data));
-    //       var count = Object.keys(response.data).length;
-    //       let countryArray = [];
-    //       for (var i = 0; i < count; i++) {
-    //         countryArray.push({
-    //           value: response.data[i].iso2,
-    //           label: response.data[i].name,
-    //         });
-    //       }
-    //       setCountryData(countryArray);
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //     });
-    // }, []);
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data } = await axios.get("students/profile");
+                console.log(data.data.learningResults);
+                let res = data.data.learningResults.sort((a, b) => {
+                    const x = a.schoolYear;
+                    const y = b.schoolYear;
+                    if (x > y) {
+                        return -1;
+                    }
+                    if (x < y) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                console.log(res)
+                var count = Object.keys(res).length;
+                let schoolYearArray = [];
+                for (var i = 0; i < count; i++) {
+                    schoolYearArray.push({
+                        value: res[i].learningResultId,
+                        label: res[i].schoolYear,
+                    });
+                }
+                setListSchoolYear(
+                    schoolYearArray
+                );
+                setSchoolYear(schoolYearArray[0].value)
+                const dataLearningResult = await axios.get(`learningresults/${schoolYearArray[0].value}`);
+                console.log("learning", dataLearningResult.data.data)
+
+                setLearningResult(dataLearningResult)
+            } catch (e) { }
+        })();
+    }, []);
 
 
-    // const handleCity = (countryCode, stateCode) => {
-    //   var config = {
-    //     method: 'get',
-    //     url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
-    //     headers: {
-    //       'X-CSCAPI-KEY': API_KEY,
-    //     },
-    //   };
+    const handleLearningResult = async (learningResultId) => {
+        const dataLearningResult = await axios.get(`learningresults/${learningResultId}`);
+        // console.log("learning", dataLearningResult.data.data)
 
-    //   axios(config)
-    //     .then(function (response) {
-    //       console.log(JSON.stringify(response.data));
-    //       var count = Object.keys(response.data).length;
-    //       let cityArray = [];
-    //       for (var i = 0; i < count; i++) {
-    //         cityArray.push({
-    //           value: response.data[i].id,
-    //           label: response.data[i].name,
-    //         });
-    //       }
-    //       setCityData(cityArray);
-    //     })
-    //     .catch(function (error) {
-    //       console.log(error);
-    //     });
-    // };
+        setLearningResult(dataLearningResult)
+    }
+
+
+
     const res = [1, 2, 3]
     return (
         <ScrollView>
@@ -101,92 +115,53 @@ const ResultScreen = () => {
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
                         iconStyle={styles.iconStyle}
-                        data={data.country}
+                        data={listSchoolYear}
+                        // data={data.country}
                         // search
                         maxHeight={300}
                         labelField="label"
                         valueField="value"
                         // placeholder={!isFocus ? 'Select country' : '...'}
                         searchPlaceholder="Search..."
-                        value={country}
+                        value={schoolYear}
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
                         onChange={item => {
-                            setCountry(item.value);
-                            console.log(country);
-                            // handleState(item.value);
-                            setCountryName(item.label);
+                            setSchoolYear(item.value);
+                            // console.log(country);
+                            handleLearningResult(item.value);
+                            setSchoolYearName(item.label);
+                            setLearningResult()
                             setIsFocus(false);
                         }}
                     />
+
                     <Dropdown
                         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                         placeholderStyle={styles.placeholderStyle}
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
                         iconStyle={styles.iconStyle}
-                        data={data.state}
+                        data={data.semester}
                         // search
                         maxHeight={300}
                         labelField="label"
                         valueField="value"
                         // placeholder={!isFocus ? 'Select state' : '...'}
                         // searchPlaceholder="Search..."
-                        value={state}
+                        value={semester}
                         // select
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
 
                         onChange={item => {
-                            setState(item.value);
+                            setSemester(item.value);
                             // handleCity(country, item.value);
-                            setStateName(item.label);
+                            setSemesterName(item.label);
                             setIsFocus(false);
                         }}
                     />
-                    {/* <Dropdown
-                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
-                    data={data.state}
-                    search
-                    maxHeight={300}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={!isFocus ? 'Select city' : '...'}
-                    searchPlaceholder="Search..."
-                    value={city}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                        setCity(item.value);
-                        setCityName(item.label);
-                        setIsFocus(false);
-                    }}
-                /> */}
-                    {/* <TouchableOpacity
-                    style={{
-                        backgroundColor: '#0F3460',
-                        padding: 20,
-                        borderRadius: 15,
-                        alignItems: 'center',
-                    }}
-                    onPress={() =>
-                        Alert.alert(
-                            `You have selected\nCountry: ${countryName}\nState: ${stateName}\nCity: ${cityName}`,
-                        )
-                    }>
-                    <Text
-                        style={{
-                            color: '#fff',
-                            textTransform: 'uppercase',
-                            fontWeight: '600',
-                        }}>
-                        Submit
-                    </Text>
-                </TouchableOpacity> */}
+
 
 
                 </View>
@@ -197,66 +172,34 @@ const ResultScreen = () => {
                     margin: 0,
                 }}>
                     <Section sectionPaddingBottom={0} marginBottom={10}>
-                        <Cell cellStyle="RightDetail" title="Tb các môn" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Học lực" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Hạnh kiểm" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Danh hiệu" detail="Chưa có" />
+                        <Cell cellStyle="RightDetail" title="Tb các môn" detail={learningResult?.data.data.learningResult.averageScore} />
+                        <Cell cellStyle="RightDetail" title="Học lực" detail={learningResult?.data.data.learningResult.averageScore} />
+                        <Cell cellStyle="RightDetail" title="Hạnh kiểm" detail={learningResult?.data.data.learningResult.conduct} />
+                        <Cell cellStyle="RightDetail" title="Danh hiệu" detail={learningResult?.data.data.learningResult.learningGrade} />
 
 
                         {/* <Section headerComponent={<CustomSectionHeader />}> */}
                     </Section>
-                    <Section header='Toán học' sectionPaddingBottom={0} headerTextStyle={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: "#000000"
-                    }}>
-                        <Cell cellStyle="RightDetail" title="Miệng:" detail={res.join(" ")} />
-                        <Cell cellStyle="RightDetail" title="15 phút:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="1 tiết:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Học kì:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="TBM:" detail="Chưa có" />
+                    {console.log("studyScores", learningResult?.data.data.studyScores)}
+                    {learningResult?.data.data.studyScores.map((item) => (
 
-                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                    </Section>
-                    <Section header='Vật lý' sectionPaddingBottom={0} headerTextStyle={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: "#000000"
-                    }}>
-                        <Cell cellStyle="RightDetail" title="Miệng:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="15 phút:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="1 tiết:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Học kì:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="TBM:" detail="Chưa có" />
+                        <Section header={mapSubjects[item.subject.subject.replace(" ", "_")]} sectionPaddingBottom={0} headerTextStyle={{
+                            fontSize: 20,
+                            fontWeight: "bold",
+                            color: "#000000"
+                        }}>
+                            {/* {console.log(item.semesters[0].exams[1].score)} */}
+                            <Cell cellStyle="RightDetail" title="Miệng:" detail={item?.semesters[semester]?.exams[0].scores.join(" ")} />
+                            <Cell cellStyle="RightDetail" title="15 phút:" detail={item?.semesters[semester]?.exams[1].scores.join(" ")} />
+                            <Cell cellStyle="RightDetail" title="1 tiết:" detail={item?.semesters[semester]?.exams[2].scores.join(" ")} />
+                            <Cell cellStyle="RightDetail" title="Học kì:" detail={item?.semesters[semester]?.exams[3].scores.join(" ")} />
+                            <Cell cellStyle="RightDetail" title="TBM:" detail={item?.semesters[semester]?.averageScore} />
 
-                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                    </Section>
-                    <Section header='Hóa học' sectionPaddingBottom={0} headerTextStyle={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: "#000000"
-                    }}>
-                        <Cell cellStyle="RightDetail" title="Miệng:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="15 phút:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="1 tiết:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Học kì:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="TBM:" detail="Chưa có" />
+                            {/* <Section headerComponent={<CustomSectionHeader />}> */}
+                        </Section>
 
-                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                    </Section>
-                    <Section header='Sinh học' sectionPaddingBottom={0} headerTextStyle={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: "#000000"
-                    }}>
-                        <Cell cellStyle="RightDetail" title="Miệng:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="15 phút:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="1 tiết:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Học kì:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="TBM:" detail="Chưa có" />
+                    ))}
 
-                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                    </Section>
                 </TableView>
 
 
