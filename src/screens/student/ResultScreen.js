@@ -54,6 +54,7 @@ const ResultScreen = () => {
             try {
                 const { data } = await axios.get("students/profile");
                 console.log(data.data.learningResults);
+                console.log("test1");
                 let res = data.data.learningResults.sort((a, b) => {
                     const x = a.schoolYear;
                     const y = b.schoolYear;
@@ -85,6 +86,7 @@ const ResultScreen = () => {
             } catch (e) { }
         })();
     }, []);
+    console.log("test 2");
 
 
     const handleLearningResult = async (learningResultId) => {

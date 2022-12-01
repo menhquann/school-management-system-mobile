@@ -14,16 +14,25 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import Timeline from 'react-native-timeline-flatlist'
 
 
-const renderScene = SceneMap({
-    1: CalendarDetail,
-    2: CalendarDetail,
-    3: CalendarDetail,
-    4: CalendarDetail,
-    5: CalendarDetail,
+// const renderScene = SceneMap({
+//     1: CalendarDetail,
+//     2: CalendarDetail,
+//     3: CalendarDetail,
+//     4: CalendarDetail,
+//     5: CalendarDetail,
 
-});
+// });
 
 export default function CalendarScreen() {
+
+    const renderScene = SceneMap({
+        1: CalendarDetail,
+        2: CalendarDetail,
+        3: CalendarDetail,
+        4: CalendarDetail,
+        5: CalendarDetail,
+
+    });
     const layout = useWindowDimensions();
 
     const [index, setIndex] = React.useState(0);
@@ -53,7 +62,7 @@ export function CalendarDetail() {
         { time: 'Tiết 4', title: 'Anh', description: 'Nguyễn văn A' },
 
     ];
-
+    console.log("RENDER")
     return (
         <View style={styles.container}>
             <Timeline
