@@ -56,10 +56,10 @@ export default function CalendarScreen() {
 export function CalendarDetail() {
 
     const data = [
-        { time: 'Tiết 1', title: 'Toán', description: 'Nguyễn văn A' },
-        { time: 'Tiết 2', title: 'Toán', description: 'Nguyễn văn A' },
-        { time: 'Tiết 3', title: 'Văn', description: 'Nguyễn văn A' },
-        { time: 'Tiết 4', title: 'Anh', description: 'Nguyễn văn A' },
+        { time: 'Tiết 1', title: 'Toán', description: 'Nguyễn văn A', circleColor: '#009688', lineColor: '#009688' },
+        { time: 'Tiết 2', title: '', description: '', separator: false, cSize: 20 },
+        { time: 'Tiết 3', title: '', description: '' },
+        { time: 'Tiết 4', title: 'Anh', description: 'Nguyễn văn A', timeContainerStyle: { minWidth: 52, marginTop: -5 }, timeStyle: { textAlign: 'center', backgroundColor: '#ff9797', color: 'white', padding: 5, borderRadius: 13, overflow: 'hidden' } },
 
     ];
     console.log("RENDER")
@@ -68,6 +68,9 @@ export function CalendarDetail() {
             <Timeline
                 style={styles.list}
                 data={data}
+                // separator={"separator"}
+                innerCircle="icons"
+            // timeStyle={{ textAlign: 'center', backgroundColor: '#ff9797', color: 'white', padding: 5, borderRadius: 13, overflow: 'hidden' }}
             />
         </View>
     );

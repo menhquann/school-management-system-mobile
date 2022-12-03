@@ -12,14 +12,17 @@ const SettingsScreen = () => {
     }
 
     return (
-        <View style={styles.container}>
+        // <View style={styles.container}>
 
-            <TouchableOpacity
-                onPress={handleSignOut}
-                style={styles.button}
-            >
-                <Text style={styles.buttonText}>Đăng xuất</Text>
-            </TouchableOpacity>
+        //     <TouchableOpacity
+        //         onPress={handleSignOut}
+        //         style={styles.button}
+        //     >
+        //         <Text style={styles.buttonText}>Đăng xuất</Text>
+        //     </TouchableOpacity>
+        // </View>
+        <View>
+            abc
         </View>
     )
 }
