@@ -7,98 +7,23 @@
 import axios from 'axios';
 import React, { Component, useEffect, useState } from 'react';
 import {
+    Dimensions,
+    ScrollView,
     StyleSheet,
     Text, useWindowDimensions,
     View
 } from 'react-native';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Timeline from 'react-native-timeline-flatlist'
-
-
-
-// const renderScene = async () => {
-//     try {
-//         const { data } = await axios.get("users/classes");
-//         console.log("dataaa1", data)
-
-//         var idClass = data.data[0].classId
-//         console.log("dataaa1", idClass)
-//         const dataCalendar = await axios.get(`users/calendar?classId=${idClass}&calendarType=Study`);
-//         console.log("dataaa", dataCalendar)
-//         var apiData = dataCalendar.data.data.items
-//     } catch (e) { }
-
-//     SceneMap({
-//         1: () => CalendarDetail("Monday", apiData),
-//         2: () => CalendarDetail("Tuesday", apiData),
-//         3: () => CalendarDetail("Wednesday", apiData),
-//         4: () => CalendarDetail("Thursday", apiData),
-//         5: () => CalendarDetail("Friday", apiData),
-//         6: () => CalendarDetail("Saturday", apiData),
-
-//     });
-// }
+import Ionicons from 'react-native-vector-icons/Ionicons';
 console.log("hello")
 var apiData = [];
-// async function getData() {
-
-//     try {
-//         const { data } = await axios.get("users/classes");
-//         console.log("dataaa1", data)
-
-//         var idClass = data.data[0].classId
-//         console.log("dataaa1", idClass)
-//         const dataCalendar = await axios.get(`users/calendar?classId=${idClass}&calendarType=Study`);
-//         console.log("dataaa", dataCalendar)
-//         apiData = (dataCalendar.data.data.items)
-//     } catch (e) { }
-// }
-
-
-// const renderScene = ({ route }) => {
-//     // // console.log("1232131")
-//     // (async () => {
-
-//     //     try {
-//     //         const { data } = await axios.get("users/classes");
-//     //         console.log("dataaa1", data)
-
-//     //         var idClass = data.data[0].classId
-//     //         console.log("dataaa1", idClass)
-//     //         const dataCalendar = await axios.get(`users/calendar?classId=${idClass}&calendarType=Study`);
-//     //         console.log("dataaa", dataCalendar)
-//     //         apiData = (dataCalendar.data.data.items)
-//     //     } catch (e) { }
 
 
 
-//     switch (route.key) {
-//         case '1':
-//             return <CalendarDetail dayOfWeek="Monday" apiData={apiData} />;
-//         case '2':
-//             return <CalendarDetail dayOfWeek="Tuesday" apiData={apiData} />;
 
-//         case '3':
-//             return <CalendarDetail dayOfWeek="Wednesday" apiData={apiData} />;
-
-//         case '4':
-//             return <CalendarDetail dayOfWeek="Thursday" apiData={apiData} />;
-
-//         case '5':
-//             return <CalendarDetail dayOfWeek="Friday" apiData={apiData} />;
-
-//         case '6':
-
-//             return <CalendarDetail dayOfWeek="Saturday" apiData={apiData} />;
-
-//         default:
-//             return null;
-//     }
-
-
-// };
 export default function CalendarScreen() {
-    // getData();
+
     const renderScene = ({ route }) => {
 
         switch (route.key) {
@@ -128,16 +53,6 @@ export default function CalendarScreen() {
     };
 
 
-    // const renderScene = SceneMap({
-    //     1: ()=>CalendarDetail("Monday",apiData),
-    //     2: ()=>CalendarDetail("Tuesday",apiData),
-    //     3: ()=>CalendarDetail("Wednesday",apiData),
-    //     4: ()=>CalendarDetail("Thursday",apiData),
-    //     5: ()=>CalendarDetail("Friday",apiData),
-    //     6: ()=>CalendarDetail("Sartuday",apiData),
-
-    // });
-
     const [reload, setReload] = useState("");
 
 
@@ -160,16 +75,53 @@ export default function CalendarScreen() {
 
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
-        { key: '1', title: 'Thứ 2' },
-        { key: '2', title: 'Thứ 3' },
-        { key: '3', title: 'Thứ 4' },
-        { key: '4', title: 'Thứ 5' },
-        { key: '5', title: 'Thứ 6' },
-        { key: '6', title: 'Thứ 7' },
+        { key: '1', title: 'T2' },
+        { key: '2', title: 'T3' },
+        { key: '3', title: 'T4' },
+        { key: '4', title: 'T5' },
+        { key: '5', title: 'T6' },
+        { key: '6', title: 'T7' },
     ]);
+
+    const renderTabBar = props => (
+
+
+        <TabBar
+            {...props}
+            // indicatorStyle={{
+            //     width: 40, left: (Dimensions.get('window').width / 6 - 40) / 2
+            // }}
+            style={{
+                backgroundColor: 'white',
+            }}
+            // tabStyle={{
+            //     width: 45,
+            //     marginHorizontal: 8,
+            //     backgroundColor: 'rgb(107,132,243)'
+            // }}
+            // contentContainerStyle={{
+            //     justifyContent: 'center',
+            // }}
+            labelStyle={{
+                fontSize: 20,
+                fontWeight: '600',
+                textTransform: 'capitalize',
+            }}
+            indicatorStyle={{
+                height: 3,
+                bottom: 6,
+                backgroundColor: 'rgb(107,132,243)',
+            }}
+            activeColor={'rgb(107,132,243)'}
+
+            inactiveColor={'rgb(168,170,199)'}
+        />
+    );
 
     return (
         <TabView
+            renderTabBar={renderTabBar}
+
             navigationState={{ index, routes }}
             renderScene={renderScene}
             onIndexChange={setIndex}
@@ -180,7 +132,7 @@ export default function CalendarScreen() {
 export function CalendarDetail({ dayOfWeek, apiData }) {
 
 
-    // const apiData = [
+    // const apiData2 = [
     //     {
     //         "calendarEventId": 11,
     //         "calendarEvent": "Physic",
@@ -315,12 +267,35 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
     //         "clazz": null
     //     }
     // ]
-    const data = [
+    const dataMorning = [
+        {
+            header: "Sáng",
+            title: '',
+            icon: <Ionicons name="location" size={40} color='rgb(0, 122, 255)' ></Ionicons>,
+            circleColor: 'rgba(0, 0, 0,0)',
+            lineColor: 'rgb(0, 122, 255)',
+
+        },
         { time: 'Tiết 1', title: '', description: '' },
         { time: 'Tiết 2', title: '', description: '' },
         { time: 'Tiết 3', title: '', description: '' },
         { time: 'Tiết 4', title: '', description: '' },
-        { time: 'Tiết 5', title: '', description: '' },
+        { time: 'Tiết 5', title: '', description: '' }
+    ]
+
+    const dataAfternoon = [
+        {
+            header: "Chiều",
+            icon: <Ionicons name="location" size={40} color='rgb(0, 122, 255)' ></Ionicons>,
+            circleColor: 'rgba(0, 0, 0,0)',
+            lineColor: 'rgb(0, 122, 255)',
+            description: "Sáng",
+            description: <View backgroundColor="#FFFFFF" textAlign="center">
+                <Text>Sáng</Text>
+
+            </View>,
+
+        },
         { time: 'Tiết 6', title: '', description: '' },
         { time: 'Tiết 7', title: '', description: '' },
         { time: 'Tiết 8', title: '', description: '' },
@@ -331,11 +306,25 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
     ];
 
     apiData.filter((itemFilter) => itemFilter["dayOfWeek"] == dayOfWeek).map((item) => {
-        data[item.lessonStart - 1].title = item.calendarEvent
-        data[item.lessonStart - 1].description = item.calendarEvent
+        if (item.lessonStart <= 5) {
+            dataMorning[item.lessonStart].title = item.calendarEvent
+            dataMorning[item.lessonStart].description = item.calendarEvent
+            dataMorning[item.lessonStart].circleColor = 'rgb(0, 122, 255)'
+            dataMorning[item.lessonStart].lineColor = 'rgb(0, 122, 255)'
+            // circleColor: 'rgb(0, 122, 255)',
+            // lineColor: 'rgb(0, 122, 255)'
+        } else {
+            dataAfternoon[item.lessonStart - 5].title = item.calendarEvent
+            dataAfternoon[item.lessonStart - 5].description = item.calendarEvent
+            dataAfternoon[item.lessonStart - 5].circleColor = 'rgb(0, 122, 255)'
+            dataAfternoon[item.lessonStart - 5].lineColor = 'rgb(0, 122, 255)'
+        }
+
     })
 
-    console.log("data", data)
+    console.log("data", dataMorning)
+    console.log("dataApi", apiData)
+
     // var count = Object.keys(apiData).length;
     // let calendarArray = [];
     // for (var i = 0; i < count; i++) {
@@ -346,25 +335,94 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
     //     });
     // }
 
-    return (
 
-        <View style={styles.container}>
-            <Timeline
-                style={styles.list}
-                data={data}
-            />
-        </View>
+
+    return (
+        <>
+            <ScrollView>
+                <View style={{ flex: 1 }}>
+
+
+                    <View >
+                        <Timeline
+                            style={styles.list}
+                            data={dataMorning}
+                            circleSize={20}
+                            circleColor="#bcbcbc"
+                            lineColor="#bcbcbc"
+                            timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
+                            timeStyle={{ textAlign: 'center', padding: 5, borderRadius: 13 }}
+                            descriptionStyle={{ color: 'black' }}
+                            options={{
+                                style: { paddingTop: 5 }
+                            }}
+                            innerCircle='icon'
+                            renderDetail={renderDetail}
+                            separator={false}
+                            isUsingFlatlist={false}
+                        />
+                    </View>
+                    <View >
+                        <Timeline
+                            style={styles.list}
+                            data={dataAfternoon}
+                            circleSize={20}
+                            circleColor="#bcbcbc"
+                            lineColor="#bcbcbc"
+                            timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
+                            timeStyle={{ textAlign: 'center', padding: 5, borderRadius: 13 }}
+                            descriptionStyle={{ color: 'black' }}
+                            options={{
+                                style: { paddingTop: 5 }
+                            }}
+                            innerCircle='icon'
+                            renderDetail={renderDetail}
+                            separator={false}
+                            isUsingFlatlist={true}
+
+                        />
+                    </View>
+                </View>
+            </ScrollView>
+
+        </>
+
     );
+
 }
 
 
+function renderDetail(rowData, sectionID, rowID) {
+    let title = <Text style={[styles.title]}>{rowData.title}</Text>
+    var desc = null
+    desc = (
+        <View style={styles.descriptionContainer}>
+            <Text style={[styles.textDescription]}>{rowData.description}</Text>
+        </View>
+    )
+
+    return (
+        rowData.header ? (
+            <View >
+                <Text style={styles.header}>{rowData.header}</Text>
+            </View>) :
+            <View style={styles.detailContainerStyle}>
+                <View style={{ flex: 1 }}>
+                    {title}
+                    {desc}
+                </View>
+            </View>
+
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        paddingTop: 65,
-        backgroundColor: "#CECECE"
+        paddingTop: 10,
+        // height:
+        // backgroundColor: "#CECECE"
     },
     list: {
         flex: 1,
@@ -390,6 +448,7 @@ const styles = StyleSheet.create({
     detailContainerStyle: {
         marginTop: -5,
         marginBottom: 5,
+        marginRight: 15,
         paddingLeft: 5,
         paddingRight: 5,
         paddingTop: 5,

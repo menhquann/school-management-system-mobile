@@ -11,40 +11,51 @@ import MainContainerTE from './src/component/MainContainerTE';
 
 
 const Stack = createNativeStackNavigator();
-
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by messager
+LogBox.ignoreAllLogs();//Ignore all log notifications
 export default function App() {
   return (
     <AuthProvider>
       {/* <ScrollView> */}
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
-          <Stack.Screen options={{
-            title: 'Hệ Thống Quản Lý Trường Học',
-            headerTitleAlign: 'center',
-            headerStyle: {
-              backgroundColor: '#f4511e',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
+      <View style={{ flex: 1 }}>
+        <NavigationContainer style={{ flex: 1 }}>
+          <Stack.Navigator style={{ flex: 1 }}>
+            <Stack.Screen style={{ flex: 1 }} options={{ headerShown: false }} name="Login" component={LoginScreen} />
+            <Stack.Screen
+              options={{
+                title: 'Hệ Thống Quản Lý Trường Học',
+                headerTitleAlign: 'center',
+                headerStyle: {
+                  backgroundColor: '#f4511e',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                  fontWeight: 'bold',
+                },
 
-          }} name="HomeST" component={MainContainerST} />
-          <Stack.Screen options={{
-            title: 'Hệ Thống Quản Lý Trường Học',
-            headerTitleAlign: 'center',
-            headerStyle: {
-              backgroundColor: '#f4511e',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
+              }}
+              name="HomeST"
+              component={MainContainerST}
+              style={{ flex: 1 }} />
+            <Stack.Screen
+              style={{ flex: 1 }}
+              options={{
+                title: 'Hệ Thống Quản Lý Trường Học',
+                headerTitleAlign: 'center',
+                headerStyle: {
+                  backgroundColor: '#f4511e',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                  fontWeight: 'bold',
+                },
 
-          }} name="HomeTE" component={MainContainerTE} />
-        </Stack.Navigator>
-      </NavigationContainer>
+              }} name="HomeTE" component={MainContainerTE} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </View>
+
       {/* </ScrollView> */}
 
     </AuthProvider>
