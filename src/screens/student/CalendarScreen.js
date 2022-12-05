@@ -16,6 +16,7 @@ import {
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Timeline from 'react-native-timeline-flatlist'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { MAPSUBJECTS } from '../../Constants';
 console.log("hello")
 var apiData = [];
 
@@ -307,15 +308,15 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
 
     apiData.filter((itemFilter) => itemFilter["dayOfWeek"] == dayOfWeek).map((item) => {
         if (item.lessonStart <= 5) {
-            dataMorning[item.lessonStart].title = item.calendarEvent
-            dataMorning[item.lessonStart].description = item.calendarEvent
+            dataMorning[item.lessonStart].title = MAPSUBJECTS[item.calendarEvent.replace(" ", "_")]
+            dataMorning[item.lessonStart].description = MAPSUBJECTS[item.calendarEvent.replace(" ", "_")]
             dataMorning[item.lessonStart].circleColor = 'rgb(0, 122, 255)'
             dataMorning[item.lessonStart].lineColor = 'rgb(0, 122, 255)'
             // circleColor: 'rgb(0, 122, 255)',
             // lineColor: 'rgb(0, 122, 255)'
         } else {
-            dataAfternoon[item.lessonStart - 5].title = item.calendarEvent
-            dataAfternoon[item.lessonStart - 5].description = item.calendarEvent
+            dataAfternoon[item.lessonStart - 5].title = MAPSUBJECTS[item.calendarEvent.replace(" ", "_")]
+            dataAfternoon[item.lessonStart - 5].description = MAPSUBJECTS[item.calendarEvent.replace(" ", "_")]
             dataAfternoon[item.lessonStart - 5].circleColor = 'rgb(0, 122, 255)'
             dataAfternoon[item.lessonStart - 5].lineColor = 'rgb(0, 122, 255)'
         }

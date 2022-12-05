@@ -11,6 +11,7 @@ import {
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
+import { MAPSUBJECTS } from '../../Constants';
 // import {BASE_URL, API_KEY} from '@env';
 
 const ResultScreen = () => {
@@ -25,21 +26,6 @@ const ResultScreen = () => {
 
     const [isFocus, setIsFocus] = useState(false);
 
-    var mapSubjects = {
-        Biological: "Sinh học",
-        Chemistry: "Hóa học",
-        Civic_Education: "Giáo dục công dân",
-        Defense_Education: "Giáo dục quốc phòng",
-        English: "Tiếng Anh",
-        Geographic: "Địa lý",
-        History: "Lịch Sử",
-        Informatics: "Tin học",
-        Literature: "Ngữ văn",
-        Maths: "Toán học",
-        Physic: "Vật lý",
-        Physical_Education: "Thể dục",
-        Technology: "Tin học"
-    }
     console.log("map", "Civic Education".replace(" ", "_"))
     const data = {
         semester: [
@@ -185,7 +171,7 @@ const ResultScreen = () => {
                     {console.log("studyScores", learningResult?.data.data.studyScores)}
                     {learningResult?.data.data.studyScores.map((item) => (
 
-                        <Section header={mapSubjects[item.subject.subject.replace(" ", "_")]} sectionPaddingBottom={0} headerTextStyle={{
+                        <Section header={MAPSUBJECTS[item.subject.subject.replace(" ", "_")]} sectionPaddingBottom={0} headerTextStyle={{
                             fontSize: 20,
                             fontWeight: "bold",
                             color: "#000000"
