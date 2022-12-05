@@ -14,7 +14,7 @@ import SettingsScreen from '../screens/teacher/SettingsScreen';
 const profileName = "Hồ sơ";
 const resultName = "Nhập điểm";
 const calendarName = "TKB";
-const settingsName = "Cài đặt";
+const settingsName = "Khác";
 
 const Tab = createBottomTabNavigator();
 
