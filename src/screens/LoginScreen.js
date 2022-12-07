@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/core'
 import axios from "axios";
 import React, { useContext, useEffect, useState } from 'react'
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 // import { AsyncStorage } from '@react-native-community/async-strorage';
 
 import AuthContext from '../context/AuthProvider';
+import Background from './Background';
 axios.defaults.baseURL = "http://ndkiet.us-east-1.elasticbeanstalk.com/api/";
 const LoginScreen = () => {
   const { setAuth } = useContext(AuthContext);
@@ -42,37 +43,47 @@ const LoginScreen = () => {
 
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior="padding"
-    >
-      <View style={styles.inputContainer}>
+    <Background>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior="padding"
+      >
+        <View >
+          {/* <Text style={styles.logo}>SMS</Text> */}
+          <Image
+            style={styles.logo}
+            source={require("../assets/logo.png")}
+          />
 
-        <TextInput
-          placeholder="User"
-          value={username}
-          onChangeText={text => setEmail(text)}
-          style={styles.input}
-        />
+        </View>
+        <View style={styles.inputContainer}>
 
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={text => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
-        />
-      </View>
+          <TextInput
+            placeholder="User"
+            value={username}
+            onChangeText={text => setEmail(text)}
+            style={styles.input}
+          />
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={handleLogin}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Đăng nhập</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={text => setPassword(text)}
+            style={styles.input}
+            secureTextEntry
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={handleLogin}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Đăng nhập</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </Background>
   )
 }
 
@@ -83,6 +94,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  logo: {
+    // width: 300,
+    // height: 58,
+    // flex: 1,
+    justifyContent: "center",
+    width: 100,
+    height: 70,
+    resizeMode: 'stretch',
+    // fontSize: 60,
+    // fontWeight: "bold",
+    // fontFamily: "Cochin",
+    // marginLeft: 85,
+    paddingHorizontal: 15,
+    paddingVertical: 60,
+    marginTop: -80,
+    marginBottom: 80,
+    // color: "#FFBF00"
   },
   inputContainer: {
     width: '80%'
@@ -124,3 +153,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 })
+

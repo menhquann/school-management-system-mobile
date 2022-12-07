@@ -20,7 +20,7 @@ const ResultScreen = () => {
     const [learningResult, setLearningResult] = useState();
 
     const [schoolYear, setSchoolYear] = useState(1);
-    const [semester, setSemester] = useState(1);
+    const [semester, setSemester] = useState(0);
     const [schoolYearName, setSchoolYearName] = useState("Năm học 2022-2023");
     const [semesterName, setSemesterName] = useState("Học kì 1");
 
@@ -77,8 +77,18 @@ const ResultScreen = () => {
 
     const handleLearningResult = async (learningResultId) => {
         const dataLearningResult = await axios.get(`learningresults/${learningResultId}`);
-        // console.log("learning", dataLearningResult.data.data)
-
+        console.log("learning", dataLearningResult.data.data)
+        // let res = data.data.learningResults.sort((a, b) => {
+        //     const x = a.schoolYear;
+        //     const y = b.schoolYear;
+        //     if (x > y) {
+        //         return -1;
+        //     }
+        //     if (x < y) {
+        //         return 1;
+        //     }
+        //     return 0;
+        // });
         setLearningResult(dataLearningResult)
     }
 
@@ -168,25 +178,35 @@ const ResultScreen = () => {
 
                         {/* <Section headerComponent={<CustomSectionHeader />}> */}
                     </Section>
+
                     {console.log("studyScores", learningResult?.data.data.studyScores)}
-                    {learningResult?.data.data.studyScores.map((item) => (
+                    {learningResult?.data.data.studyScores
+                        .sort(
+                            (a, b) => {
+                                const x = a.subject.subjectId;
+                                const y = b.subject.subjectId;
 
-                        <Section header={MAPSUBJECTS[item.subject.subject.replace(" ", "_")]} sectionPaddingBottom={0} headerTextStyle={{
-                            fontSize: 20,
-                            fontWeight: "bold",
-                            color: "#000000"
-                        }}>
-                            {/* {console.log(item.semesters[0].exams[1].score)} */}
-                            <Cell cellStyle="RightDetail" title="Miệng:" detail={item?.semesters[semester]?.exams[0].scores.join(" ")} />
-                            <Cell cellStyle="RightDetail" title="15 phút:" detail={item?.semesters[semester]?.exams[1].scores.join(" ")} />
-                            <Cell cellStyle="RightDetail" title="1 tiết:" detail={item?.semesters[semester]?.exams[2].scores.join(" ")} />
-                            <Cell cellStyle="RightDetail" title="Học kì:" detail={item?.semesters[semester]?.exams[3].scores.join(" ")} />
-                            <Cell cellStyle="RightDetail" title="TBM:" detail={item?.semesters[semester]?.averageScore} />
+                                return x - y;
+                            }
+                        )
+                        .map((item) => (
 
-                            {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                        </Section>
+                            <Section header={MAPSUBJECTS[item.subject.subject.replace(" ", "_")]} sectionPaddingBottom={0} headerTextStyle={{
+                                fontSize: 20,
+                                fontWeight: "bold",
+                                color: "#000000"
+                            }}>
+                                {/* {console.log(item.semesters[0].exams[1].score)} */}
+                                <Cell cellStyle="RightDetail" title="Miệng:" detail={item?.semesters[semester]?.exams[0].scores.join(" ")} />
+                                <Cell cellStyle="RightDetail" title="15 phút:" detail={item?.semesters[semester]?.exams[1].scores.join(" ")} />
+                                <Cell cellStyle="RightDetail" title="1 tiết:" detail={item?.semesters[semester]?.exams[2].scores.join(" ")} />
+                                <Cell cellStyle="RightDetail" title="Học kì:" detail={item?.semesters[semester]?.exams[3].scores.join(" ")} />
+                                <Cell cellStyle="RightDetail" title="TBM:" detail={item?.semesters[semester]?.averageScore} />
 
-                    ))}
+                                {/* <Section headerComponent={<CustomSectionHeader />}> */}
+                            </Section>
+
+                        ))}
 
                 </TableView>
 
