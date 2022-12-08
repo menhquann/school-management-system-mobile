@@ -111,7 +111,7 @@ export default function ProfileScreen() {
                     </View>
                 </View>
                 <TableView appearance="light">
-                    <Section >
+                    <Section sectionPaddingBottom={0}>
                         <Cell
                             cellStyle="Basic"
                             title="Đổi mật khẩu"
@@ -119,7 +119,7 @@ export default function ProfileScreen() {
                             onPress={() => navigation.push("ChangePassword")}
                         />
                     </Section>
-                    <Section >
+                    <Section sectionPaddingBottom={0}>
                         <Cell
                             cellStyle="Basic"
                             title="Đăng xuất"

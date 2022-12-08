@@ -13,6 +13,7 @@ import {
     Text, useWindowDimensions,
     View
 } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Timeline from 'react-native-timeline-flatlist'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -25,6 +26,21 @@ var apiData = [];
 
 export default function CalendarScreen() {
 
+    const [listSchoolYear, setListSchoolYear] = useState([]);
+    const [schoolYear, setSchoolYear] = useState(1);
+    const [semester, setSemester] = useState(0);
+    const [schoolYearName, setSchoolYearName] = useState("Năm học 2022-2023");
+    const [semesterName, setSemesterName] = useState("Học kì 1");
+
+    const [isFocus, setIsFocus] = useState(false);
+
+    const data = {
+        semester: [
+            { value: 0, label: "Học kì 1" },
+            { value: 1, label: "Học kì 2" },
+            // { value: 2, label: "Cả năm" },
+        ],
+    }
     const renderScene = ({ route }) => {
 
         switch (route.key) {
@@ -62,12 +78,12 @@ export default function CalendarScreen() {
         (async () => {
             try {
                 const { data } = await axios.get("users/classes");
-                console.log("dataaa1", data)
+                // console.log("dataaa1", data)
 
                 var idClass = data.data[0].classId
-                console.log("dataaa1", idClass)
+                // console.log("dataaa1", idClass)
                 const dataCalendar = await axios.get(`users/calendar?classId=${idClass}&calendarType=Study`);
-                console.log("dataaa", dataCalendar)
+                // console.log("dataaa", dataCalendar)
                 apiData = (dataCalendar.data.data.items)
                 setReload("a");
             } catch (e) { }
@@ -94,6 +110,9 @@ export default function CalendarScreen() {
             // }}
             style={{
                 backgroundColor: 'white',
+                // borderColor: 'gray',
+                // borderWidth: 0.5,
+                borderRadius: 8,
             }}
             // tabStyle={{
             //     width: 45,
@@ -120,14 +139,87 @@ export default function CalendarScreen() {
     );
 
     return (
-        <TabView
-            renderTabBar={renderTabBar}
+        <>
 
-            navigationState={{ index, routes }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            initialLayout={{ width: layout.width }}
-        />
+            <View style={{
+                flex: 1,
+                flexDirection: "row",
+                backgroundColor: '#fff',
+                paddingTop: 5,
+                paddingLeft: 20,
+                paddingRight: 20,
+                borderRadius: 15,
+                borderColor: 'gray',
+                borderWidth: 0.5,
+                borderRadius: 8,
+            }}>
+                <Dropdown
+                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={listSchoolYear}
+                    // data={data.country}
+                    // search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    // placeholder={!isFocus ? 'Select country' : '...'}
+                    searchPlaceholder="Search..."
+                    value={schoolYear}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+                    onChange={item => {
+                        setSchoolYear(item.value);
+                        // console.log(country);
+                        handleLearningResult(item.value);
+                        setSchoolYearName(item.label);
+                        // setLearningResult()
+                        setIsFocus(false);
+                    }}
+                />
+
+                <Dropdown
+                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={data.semester}
+                    // search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    // placeholder={!isFocus ? 'Select state' : '...'}
+                    // searchPlaceholder="Search..."
+                    value={semester}
+                    // select
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+
+                    onChange={item => {
+                        setSemester(item.value);
+                        // handleCity(country, item.value);
+                        setSemesterName(item.label);
+                        setIsFocus(false);
+                    }}
+                />
+
+
+
+            </View>
+
+            <TabView
+                renderTabBar={renderTabBar}
+                lazy
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={{ width: layout.width }}
+                style={{ flex: 11 }}
+            />
+        </>
     );
 }
 export function CalendarDetail({ dayOfWeek, apiData }) {
@@ -268,6 +360,8 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
     //         "clazz": null
     //     }
     // ]
+
+
     const dataMorning = [
         {
             header: "Sáng",
@@ -320,8 +414,8 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
 
     })
 
-    console.log("data", dataMorning)
-    console.log("dataApi", apiData)
+    // console.log("data", dataMorning)
+    // console.log("dataApi", apiData)
 
     // var count = Object.keys(apiData).length;
     // let calendarArray = [];
@@ -339,6 +433,9 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
         <>
             <ScrollView>
                 <View style={{ flex: 1 }}>
+
+                    {/* <StatusBar barStyle="light-content" /> */}
+
 
 
                     <View >
@@ -479,6 +576,44 @@ const styles = StyleSheet.create({
         marginLeft: 85,
         marginTop: -10,
         color: "#FFBF00"
-    }
+    },
+    dropdown: {
+        flex: 1,
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
+        // marginBottom: 10,
+        // padding: 16,
+    },
+    icon: {
+        marginRight: 5,
+    },
+    label: {
+        position: 'absolute',
+        backgroundColor: 'white',
+        left: 22,
+        top: 8,
+        zIndex: 999,
+        paddingHorizontal: 8,
+        fontSize: 14,
+    },
+    placeholderStyle: {
+        fontSize: 16,
+        paddingLeft: 15,
+    },
+    selectedTextStyle: {
+        paddingLeft: 15,
+        fontSize: 16,
+    },
+    iconStyle: {
+        width: 20,
+        height: 20,
+    },
+    inputSearchStyle: {
+        height: 40,
+        fontSize: 16,
+    },
 
 });

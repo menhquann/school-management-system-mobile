@@ -59,14 +59,16 @@ const LoginScreen = () => {
         <View style={styles.inputContainer}>
 
           <TextInput
-            placeholder="User"
+            placeholder="Tên đăng nhập"
+            placeholderTextColor="#000"
             value={username}
             onChangeText={text => setEmail(text)}
             style={styles.input}
           />
 
           <TextInput
-            placeholder="Password"
+            placeholder="Mật khẩu"
+            placeholderTextColor="#000"
             value={password}
             onChangeText={text => setPassword(text)}
             style={styles.input}
@@ -117,7 +119,8 @@ const styles = StyleSheet.create({
     width: '80%'
   },
   input: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgb(232, 240, 254)',
+
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,

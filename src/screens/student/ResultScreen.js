@@ -31,7 +31,7 @@ const ResultScreen = () => {
         semester: [
             { value: 0, label: "Học kì 1" },
             { value: 1, label: "Học kì 2" },
-            { value: 2, label: "Cả năm" },
+            // { value: 2, label: "Cả năm" },
         ],
     }
 
@@ -99,13 +99,19 @@ const ResultScreen = () => {
         <ScrollView>
 
             <View style={styles.container}>
-                <StatusBar barStyle="light-content" />
+                {/* <StatusBar barStyle="light-content" /> */}
                 <View style={{
-                    // backgroundColor: '#fff',
-                    paddingTop: 20,
+                    flex: 1,
+                    flexDirection: "row",
+                    backgroundColor: '#fff',
+                    paddingTop: 5,
+                    paddingBottom: 10,
                     paddingLeft: 20,
                     paddingRight: 20,
-                    borderRadius: 15
+                    borderRadius: 15,
+                    borderColor: 'gray',
+                    borderWidth: 0.5,
+                    borderRadius: 8,
                 }}>
                     <Dropdown
                         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
@@ -129,7 +135,7 @@ const ResultScreen = () => {
                             // console.log(country);
                             handleLearningResult(item.value);
                             setSchoolYearName(item.label);
-                            setLearningResult()
+                            // setLearningResult()
                             setIsFocus(false);
                         }}
                     />
@@ -165,10 +171,13 @@ const ResultScreen = () => {
                 </View>
 
 
-                <TableView appearance="light" style={{
-                    padding: 0,
-                    margin: 0,
-                }}>
+                <TableView
+                    appearance="light"
+                    style={{
+                        padding: 0,
+                        margin: 0,
+                    }}
+                >
                     <Section sectionPaddingBottom={0} marginBottom={10}>
                         <Cell cellStyle="RightDetail" title="Tb các môn" detail={learningResult?.data.data.learningResult.averageScore} />
                         <Cell cellStyle="RightDetail" title="Học lực" detail={learningResult?.data.data.learningResult.averageScore} />
@@ -191,11 +200,15 @@ const ResultScreen = () => {
                         )
                         .map((item) => (
 
-                            <Section header={MAPSUBJECTS[item.subject.subject.replace(" ", "_")]} sectionPaddingBottom={0} headerTextStyle={{
-                                fontSize: 20,
-                                fontWeight: "bold",
-                                color: "#000000"
-                            }}>
+                            <Section
+                                sectionPaddingBottom={0} marginBottom={10}
+                                header={MAPSUBJECTS[item.subject.subject.replace(" ", "_")]}
+                                // sectionPaddingBottom={10}
+                                headerTextStyle={{
+                                    fontSize: 20,
+                                    fontWeight: "bold",
+                                    color: "#000000"
+                                }}>
                                 {/* {console.log(item.semesters[0].exams[1].score)} */}
                                 <Cell cellStyle="RightDetail" title="Miệng:" detail={item?.semesters[semester]?.exams[0].scores.join(" ")} />
                                 <Cell cellStyle="RightDetail" title="15 phút:" detail={item?.semesters[semester]?.exams[1].scores.join(" ")} />
@@ -207,6 +220,7 @@ const ResultScreen = () => {
                             </Section>
 
                         ))}
+
 
                 </TableView>
 
@@ -225,19 +239,19 @@ const styles = StyleSheet.create({
 
 
         // flexDirection: 'row',
-        backgroundColor: '#FFFFFF',
+        // backgroundColor: '#FFFFFF',
         // padding: 16,
         // justifyContent: 'center',
         // alignContent: 'center',
     },
     dropdown: {
         flex: 1,
-        height: 50,
+        height: 40,
         borderColor: 'gray',
         borderWidth: 0.5,
         borderRadius: 8,
-        // paddingHorizontal: 8,
-        marginBottom: 10,
+        paddingHorizontal: 8,
+        // marginBottom: 10,
         // padding: 16,
     },
     icon: {

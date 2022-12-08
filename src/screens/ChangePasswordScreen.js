@@ -48,6 +48,7 @@ const LoginScreen = () => {
 
         <TextInput
           placeholder="Mật khẩu hiện tại"
+          placeholderTextColor="#000"
           value={currentPassword}
           onChangeText={text => setCurrentPassword(text)}
           style={styles.input}
@@ -55,6 +56,7 @@ const LoginScreen = () => {
 
         <TextInput
           placeholder="Mật khẩu mới"
+          placeholderTextColor="#000"
           value={newPassword}
           onChangeText={text => setNewPassword(text)}
           style={styles.input}
@@ -63,6 +65,7 @@ const LoginScreen = () => {
 
         <TextInput
           placeholder="Nhập lại mật khẩu mới"
+          placeholderTextColor="#000"
           value={confirmPassword}
           onChangeText={text => setConfirmPassword(text)}
           style={styles.input}
