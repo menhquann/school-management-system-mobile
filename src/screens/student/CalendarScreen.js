@@ -272,9 +272,10 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
         {
             header: "Sáng",
             title: '',
-            icon: <Ionicons name="location" size={40} color='rgb(0, 122, 255)' ></Ionicons>,
+            // icon: <Ionicons name="location" size={40} color='rgb(0, 122, 255)' ></Ionicons>,
             circleColor: 'rgba(0, 0, 0,0)',
-            lineColor: 'rgb(0, 122, 255)',
+            lineColor: 'rgba(0, 0, 0,0)',
+            // lineColor: 'rgb(0, 122, 255)',
 
         },
         { time: 'Tiết 1', title: '', description: '' },
@@ -287,14 +288,10 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
     const dataAfternoon = [
         {
             header: "Chiều",
-            icon: <Ionicons name="location" size={40} color='rgb(0, 122, 255)' ></Ionicons>,
+            // icon: <Ionicons name="location" size={40} color='rgb(0, 122, 255)' ></Ionicons>,
             circleColor: 'rgba(0, 0, 0,0)',
-            lineColor: 'rgb(0, 122, 255)',
-            description: "Sáng",
-            description: <View backgroundColor="#FFFFFF" textAlign="center">
-                <Text>Sáng</Text>
-
-            </View>,
+            lineColor: 'rgba(0, 0, 0,0)',
+            // lineColor: 'rgb(0, 122, 255)',
 
         },
         { time: 'Tiết 6', title: '', description: '' },
@@ -406,13 +403,19 @@ function renderDetail(rowData, sectionID, rowID) {
         rowData.header ? (
             <View >
                 <Text style={styles.header}>{rowData.header}</Text>
-            </View>) :
-            <View style={styles.detailContainerStyle}>
-                <View style={{ flex: 1 }}>
-                    {title}
-                    {desc}
+            </View>) : rowData.title ? (
+                <View style={styles.detailContainerStyle}>
+                    <View style={{ flex: 1 }}>
+                        {title}
+                        {desc}
+                    </View>
                 </View>
-            </View>
+            ) : (
+            <View style={styles.detailContainerStyle2}>
+                <View style={{ flex: 1 }}>
+
+                </View>
+            </View>)
 
     )
 }
@@ -455,6 +458,17 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingBottom: 5,
         backgroundColor: "#BBDAFF",
+        borderRadius: 10
+    },
+    detailContainerStyle2: {
+        marginTop: -5,
+        marginBottom: 5,
+        marginRight: 15,
+        paddingLeft: 5,
+        paddingRight: 5,
+        paddingTop: 5,
+        paddingBottom: 5,
+        backgroundColor: "#bcbcbc",
         borderRadius: 10
     },
     detail: { paddingTop: 10, paddingBottom: 10 },
