@@ -49,7 +49,7 @@ function MainContainerTE() {
         activeTintColor: 'tomato',
         inactiveTintColor: 'grey',
         labelStyle: { paddingBottom: 10, fontSize: 10 },
-        style: { padding: 10, height: 70, flex: 1 }
+        style: { padding: 10, height: 70 }
       }}>
 
       <Tab.Screen name={profileName} component={ProfileScreen} />

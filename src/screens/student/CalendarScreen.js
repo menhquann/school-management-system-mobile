@@ -19,7 +19,7 @@ import Timeline from 'react-native-timeline-flatlist'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { MAPSUBJECTS } from '../../Constants';
 console.log("hello")
-var apiData = [];
+// var apiData = [];
 
 
 
@@ -28,19 +28,60 @@ export default function CalendarScreen() {
 
     const [listSchoolYear, setListSchoolYear] = useState([]);
     const [schoolYear, setSchoolYear] = useState(1);
-    const [semester, setSemester] = useState(0);
+    const [semester, setSemester] = useState(1);
     const [schoolYearName, setSchoolYearName] = useState("Năm học 2022-2023");
     const [semesterName, setSemesterName] = useState("Học kì 1");
 
     const [isFocus, setIsFocus] = useState(false);
-
+    const [apiData, setApiData] = useState([]);
     const data = {
         semester: [
-            { value: 0, label: "Học kì 1" },
-            { value: 1, label: "Học kì 2" },
+            { value: 1, label: "Học kì 1" },
+            { value: 2, label: "Học kì 2" },
             // { value: 2, label: "Cả năm" },
         ],
     }
+    const layout = useWindowDimensions();
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data } = await axios.get("users/classes");
+                // console.log(data.data.learningResults);
+                // console.log("test1");
+                let res = data.data.sort((a, b) => {
+                    const x = a.clazz;
+                    const y = b.clazz;
+                    if (x > y) {
+                        return -1;
+                    }
+                    if (x < y) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                console.log(res)
+                var count = Object.keys(res).length;
+                let schoolYearArray = [];
+                for (var i = 0; i < count; i++) {
+                    schoolYearArray.push({
+                        value: res[i].classId,
+                        label: res[i].clazz,
+                    });
+                }
+                setListSchoolYear(
+                    schoolYearArray
+                );
+                setSchoolYear(schoolYearArray[0].value)
+                // var idClass = data.data[0].classId
+                // console.log("dataaa1", idClass)
+                const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarType=Study`);
+                console.log("apiinit", `users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarType=Study`)
+                // apiData = (dataCalendar.data.data.items)
+                setApiData(dataCalendar.data.data.items);
+            } catch (e) { }
+        })();
+    }, []);
+
     const renderScene = ({ route }) => {
 
         switch (route.key) {
@@ -68,27 +109,31 @@ export default function CalendarScreen() {
 
 
     };
+    const handleLearningResult = async (schoolYearId, semesterId) => {
+        const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarType=Study`);
+        console.log("apicall", `users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarType=Study`)
+        // apiData = (dataCalendar.data.data.items)
+        console.log("apicall", dataCalendar.data.data.items)
 
+        setApiData(dataCalendar.data.data.items)
+        // setLearningResult(dataLearningResult)
+    }
 
-    const [reload, setReload] = useState("");
+    // useEffect(() => {
+    //     (async () => {
+    //         try {
+    //             const { data } = await axios.get("users/classes");
+    //             // console.log("dataaa1", data)
 
-
-    const layout = useWindowDimensions();
-    useEffect(() => {
-        (async () => {
-            try {
-                const { data } = await axios.get("users/classes");
-                // console.log("dataaa1", data)
-
-                var idClass = data.data[0].classId
-                // console.log("dataaa1", idClass)
-                const dataCalendar = await axios.get(`users/calendar?classId=${idClass}&calendarType=Study`);
-                // console.log("dataaa", dataCalendar)
-                apiData = (dataCalendar.data.data.items)
-                setReload("a");
-            } catch (e) { }
-        })();
-    }, []);
+    //             var idClass = data.data[0].classId
+    //             // console.log("dataaa1", idClass)
+    //             const dataCalendar = await axios.get(`users/calendar?classId=${idClass}&calendarType=Study`);
+    //             // console.log("dataaa", dataCalendar)
+    //             apiData = (dataCalendar.data.data.items)
+    //             setReload("a");
+    //         } catch (e) { }
+    //     })();
+    // }, []);
 
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
@@ -173,7 +218,7 @@ export default function CalendarScreen() {
                     onChange={item => {
                         setSchoolYear(item.value);
                         // console.log(country);
-                        handleLearningResult(item.value);
+                        handleLearningResult(item.value, semester);
                         setSchoolYearName(item.label);
                         // setLearningResult()
                         setIsFocus(false);
@@ -201,6 +246,8 @@ export default function CalendarScreen() {
                     onChange={item => {
                         setSemester(item.value);
                         // handleCity(country, item.value);
+                        handleLearningResult(schoolYear, item.value);
+
                         setSemesterName(item.label);
                         setIsFocus(false);
                     }}
@@ -212,7 +259,7 @@ export default function CalendarScreen() {
 
             <TabView
                 renderTabBar={renderTabBar}
-                lazy
+                // lazy
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
                 onIndexChange={setIndex}

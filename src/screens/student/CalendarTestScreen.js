@@ -19,7 +19,7 @@ import Timeline from 'react-native-timeline-flatlist'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { MAPSUBJECTS } from '../../Constants';
 
-export default function CalendarDetail({ dayOfWeek, apiData }) {
+export default function CalendarDetail() {
 
 
 
@@ -29,6 +29,7 @@ export default function CalendarDetail({ dayOfWeek, apiData }) {
   const [schoolYearName, setSchoolYearName] = useState("Năm học 2022-2023");
   const [semesterName, setSemesterName] = useState("Học kì 1");
 
+  const [apiData, setApiData] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
 
   const data = {
@@ -39,6 +40,56 @@ export default function CalendarDetail({ dayOfWeek, apiData }) {
     ],
   }
 
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await axios.get("users/classes");
+        // console.log(data.data.learningResults);
+        // console.log("test1");
+        let res = data.data.sort((a, b) => {
+          const x = a.clazz;
+          const y = b.clazz;
+          if (x > y) {
+            return -1;
+          }
+          if (x < y) {
+            return 1;
+          }
+          return 0;
+        });
+        console.log(res)
+        var count = Object.keys(res).length;
+        let schoolYearArray = [];
+        for (var i = 0; i < count; i++) {
+          schoolYearArray.push({
+            value: res[i].classId,
+            label: res[i].clazz,
+          });
+        }
+        setListSchoolYear(
+          schoolYearArray
+        );
+        setSchoolYear(schoolYearArray[0].value)
+        // var idClass = data.data[0].classId
+        // console.log("dataaa1", idClass)
+        const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarType=Examination`);
+        console.log("apiinit", `users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarType=Examination`)
+        // apiData = (dataCalendar.data.data.items)
+        setApiData(dataCalendar.data.data.items);
+      } catch (e) { }
+    })();
+  }, []);
+
+  const handleLearningResult = async (schoolYearId, semesterId) => {
+    const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarType=Examination`);
+    console.log("apicall", `users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarType=Examination`)
+    // apiData = (dataCalendar.data.data.items)
+    console.log("apicall", dataCalendar.data.data.items)
+
+    setApiData(dataCalendar.data.data.items)
+    // setLearningResult(dataLearningResult)
+  }
   const apiData2 = [
     {
       "calendarEventId": 11,
@@ -180,6 +231,10 @@ export default function CalendarDetail({ dayOfWeek, apiData }) {
     { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
     { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
     { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '1-0-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
     { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
 
   ]
@@ -236,7 +291,8 @@ export default function CalendarDetail({ dayOfWeek, apiData }) {
               onChange={item => {
                 setSchoolYear(item.value);
                 // console.log(country);
-                handleLearningResult(item.value);
+                handleLearningResult(item.value, semester);
+
                 setSchoolYearName(item.label);
                 // setLearningResult()
                 setIsFocus(false);
@@ -263,6 +319,7 @@ export default function CalendarDetail({ dayOfWeek, apiData }) {
 
               onChange={item => {
                 setSemester(item.value);
+                handleLearningResult(schoolYear, item.value);
                 // handleCity(country, item.value);
                 setSemesterName(item.label);
                 setIsFocus(false);
