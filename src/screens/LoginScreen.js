@@ -36,7 +36,7 @@ const LoginScreen = () => {
     // setNavigate(lg);w
 
     console.log("compare", username.localeCompare("schooladmin1"))
-    if (!username.localeCompare("schooladmin1"))
+    if (!username.localeCompare("teacher2@thpthoanghoatham"))
       navigation.replace("HomeTE")
     else navigation.replace("HomeST")
   };

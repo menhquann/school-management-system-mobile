@@ -176,9 +176,10 @@ const ResultScreen = () => {
                     style={{
                         padding: 0,
                         margin: 0,
+                        marginHorizontal: 15,
                     }}
                 >
-                    <Section sectionPaddingBottom={0} marginBottom={10}>
+                    <Section sectionPaddingBottom={0} marginBottom={10} roundedCorners={true} hideSurroundingSeparators={true}>
                         <Cell cellStyle="RightDetail" title="Tb các môn" detail={learningResult?.data.data.learningResult.averageScore} />
                         <Cell cellStyle="RightDetail" title="Học lực" detail={learningResult?.data.data.learningResult.averageScore} />
                         <Cell cellStyle="RightDetail" title="Hạnh kiểm" detail={learningResult?.data.data.learningResult.conduct} />
@@ -202,6 +203,7 @@ const ResultScreen = () => {
 
                             <Section
                                 sectionPaddingBottom={0} marginBottom={10}
+                                roundedCorners={true} hideSurroundingSeparators={true}
                                 header={MAPSUBJECTS[item.subject.subject.replace(" ", "_")]}
                                 // sectionPaddingBottom={10}
                                 headerTextStyle={{

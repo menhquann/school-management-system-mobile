@@ -30,7 +30,6 @@ export default function CalendarDetail() {
   const [semesterName, setSemesterName] = useState("Học kì 1");
 
   const [apiData, setApiData] = useState([]);
-
   const [isFocus, setIsFocus] = useState(false);
 
   const data = {
@@ -74,8 +73,8 @@ export default function CalendarDetail() {
         setSchoolYear(schoolYearArray[0].value)
         // var idClass = data.data[0].classId
         // console.log("dataaa1", idClass)
-        const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarEventType=Examination`);
-        console.log("apiinit", `users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarEventType=Examination`)
+        const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarType=Examination`);
+        console.log("apiinit", `users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarType=Examination`)
         // apiData = (dataCalendar.data.data.items)
         setApiData(dataCalendar.data.data.items);
       } catch (e) { }
@@ -83,8 +82,8 @@ export default function CalendarDetail() {
   }, []);
 
   const handleLearningResult = async (schoolYearId, semesterId) => {
-    const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarEventType=Examination`);
-    console.log("apicall", `users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarEventType=Examination`)
+    const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarType=Examination`);
+    console.log("apicall", `users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarType=Examination`)
     // apiData = (dataCalendar.data.data.items)
     console.log("apicall", dataCalendar.data.data.items)
 
@@ -226,31 +225,22 @@ export default function CalendarDetail() {
       "clazz": null
     }
   ]
-  var dataCalendar = [
+  const dataMorning = [
 
-    // { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
-
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '1-0-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
 
   ]
-  console.log("sort ", apiData[0]?.calendarDate)
-  apiData.sort(
-    (a, b) => {
-      const x = a.calendarDate;
-      const y = b.calendarDate;
-      if (x > y) {
-        return 1;
-      }
-      if (x < y) {
-        return -1;
-      }
-      return 0;
-    }
-  ).forEach(item => {
-    dataCalendar.push({ time: item.calendarDate, title: `${item.calendarEvent} - Môn ${MAPSUBJECTS[item.subjectName]} `, description: `Phòng: ${item.roomName}`, timeStart: item.timeStart, timeFinish: item.timeFinish })
-  })
 
 
-  // console.log("data", dataCalendar)
+  // console.log("data", dataMorning)
   // console.log("dataApi", apiData)
 
   // var count = Object.keys(apiData).length;
@@ -343,7 +333,7 @@ export default function CalendarDetail() {
           <View >
             <Timeline
               style={styles.list}
-              data={dataCalendar}
+              data={dataMorning}
               circleSize={20}
               // circleColor="#bcbcbc"
               // lineColor="#bcbcbc"

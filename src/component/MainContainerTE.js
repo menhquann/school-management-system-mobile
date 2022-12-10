@@ -7,13 +7,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ProfileScreen from '../screens/teacher/ProfileScreen';
 import ResultScreen from '../screens/teacher/ResultScreen';
 import CalendarScreen from '../screens/teacher/CalendarScreen';
+import CalendarMeetingScreen from '../screens/teacher/CalendarMeetingScreen';
 import SettingsScreen from '../screens/teacher/SettingsScreen';
 
 
 //Screen names
 const profileName = "Hồ sơ";
 const resultName = "Nhập điểm";
-const calendarName = "TKB";
+const calendarName = "Lịch dạy";
+const calendarMeetingName = "Lịch họp";
 const settingsName = "Khác";
 
 const Tab = createBottomTabNavigator();
@@ -36,6 +38,8 @@ function MainContainerTE() {
 
           } else if (rn === calendarName) {
             iconName = focused ? 'calendar' : 'calendar-outline';
+          } else if (rn === calendarMeetingName) {
+            iconName = focused ? 'time' : 'time-outline';
 
           } else if (rn === settingsName) {
             iconName = focused ? 'settings' : 'settings-outline';
@@ -55,6 +59,7 @@ function MainContainerTE() {
       <Tab.Screen name={profileName} component={ProfileScreen} />
       <Tab.Screen name={resultName} component={ResultScreen} />
       <Tab.Screen name={calendarName} component={CalendarScreen} />
+      <Tab.Screen name={calendarMeetingName} component={CalendarMeetingScreen} />
       <Tab.Screen name={settingsName} component={SettingsScreen} />
 
 

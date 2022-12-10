@@ -109,8 +109,14 @@ export default function ProfileScreen() {
                         </View>
                     </View>
                 </View>
-                <TableView appearance="light">
-                    <Section headerComponent={<CustomSectionHeader />}>
+                <TableView appearance="light"
+                    style={{
+                        padding: 0,
+                        margin: 0,
+                        marginHorizontal: 15,
+                    }}>
+                    <Section headerComponent={<CustomSectionHeader />}
+                        roundedCorners={true} hideSurroundingSeparators={true}>
                         <Cell cellStyle="RightDetail" title="Họ và tên" detail={displayName} />
                         <Cell cellStyle="RightDetail" title="Số điện thoại" detail={phone} />
                         <Cell cellStyle="RightDetail" title="Email" detail={email} />

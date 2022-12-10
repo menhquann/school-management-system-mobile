@@ -74,8 +74,8 @@ export default function CalendarScreen() {
                 setSchoolYear(schoolYearArray[0].value)
                 // var idClass = data.data[0].classId
                 // console.log("dataaa1", idClass)
-                const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarType=Study`);
-                console.log("apiinit", `users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarType=Study`)
+                const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarEventType=Study`);
+                console.log("apiinit", `users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarEventType=Study`)
                 // apiData = (dataCalendar.data.data.items)
                 setApiData(dataCalendar.data.data.items);
             } catch (e) { }
@@ -110,8 +110,8 @@ export default function CalendarScreen() {
 
     };
     const handleLearningResult = async (schoolYearId, semesterId) => {
-        const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarType=Study`);
-        console.log("apicall", `users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarType=Study`)
+        const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarEventType=Study`);
+        console.log("apicall", `users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarEventType=Study`)
         // apiData = (dataCalendar.data.data.items)
         console.log("apicall", dataCalendar.data.data.items)
 
@@ -127,7 +127,7 @@ export default function CalendarScreen() {
 
     //             var idClass = data.data[0].classId
     //             // console.log("dataaa1", idClass)
-    //             const dataCalendar = await axios.get(`users/calendar?classId=${idClass}&calendarType=Study`);
+    //             const dataCalendar = await axios.get(`users/calendar?classId=${idClass}&calendarEventType=Study`);
     //             // console.log("dataaa", dataCalendar)
     //             apiData = (dataCalendar.data.data.items)
     //             setReload("a");
