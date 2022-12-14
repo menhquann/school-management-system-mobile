@@ -113,6 +113,21 @@ const ResultScreen = () => {
     const { schoolYearContext, clazzContext, semesterContext, typeScoreContext } = useContext(AuthContext);
 
     const [data, setData] = useState([])
+    const [inputs, setInputs] = useState({});
+
+    useEffect(() => {
+        (async () => {
+            try {
+                // console.log("dataApiaaaaaa", `examresults/class?schoolYearId=${schoolYearContext}&semesterId=${semesterContext}&classId=${clazzContext}`)
+                const { data } = await axios.get(`examresults/class?schoolYearId=${schoolYearContext}&semesterId=${semesterContext}&classId=${clazzContext}`);
+                // console.log("abcaaaaaaaaaaaaaa", data.data.examResults)
+                // console.log("abcaaaaaaaaaaaaaa", 123)
+
+                setData(data)
+            } catch (e) { }
+        })();
+    }, []);
+
     return (
         <ScrollView>
 
@@ -130,9 +145,10 @@ const ResultScreen = () => {
                 >
 
 
-                    {/* {console.log("studysScores", MOCK_DATA?.data.studyScores)} */}
-                    {MOCK_DATA?.examResults
-                        .sort(
+                    {console.log("studysScoresâa", data?.examResults)}
+
+                    {data?.data?.examResults
+                        ?.sort(
                             (a, b) => {
                                 const x = a.student.studentId;
                                 const y = b.student.studentId;
