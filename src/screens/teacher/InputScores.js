@@ -81,7 +81,7 @@ export default function App() {
             try {
                 // console.log("dataApi", `examresults/class?schoolYearId=${schoolYearContext}&semesterId=${semesterContext}&classId=${clazzContext}`)
                 const { data } = await axios.get(`examresults/class?schoolYearId=${schoolYearContext}&semesterId=${semesterContext}&classId=${clazzContext}`);
-                console.log("abc", data)
+                // console.log("abc", data)
                 const tempInputs = {}
                 const tempData = []
                 data.data.examResults.forEach(element => {
@@ -95,7 +95,16 @@ export default function App() {
                 });
                 console.log("tempInputs", tempInputs)
                 setInputs(tempInputs)
-                setData(tempData)
+
+                setData(tempData.sort(
+                    (a, b) => {
+                        const x = a.id;
+                        const y = b.id;
+
+                        return x - y;
+                    }
+                )
+                )
             } catch (e) { }
         })();
     }, []);
@@ -103,9 +112,38 @@ export default function App() {
     console.log("inputs", inputs)
 
 
-    const handleSubmit = () => {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const studentScores = [];
+        for (let key in inputs) {
+            if (studentScores.find((item) => item?.studentId === key.slice(0, -2)))
+                studentScores
+                    .find((item) => item?.studentId === key.slice(0, -2))
+                    .scores.push({
+                        score: parseFloat(inputs[key]),
+                        type: key.slice(-2),
+                    });
+            else
+                studentScores.push({
+                    studentId: key.slice(0, -2),
+                    scores: [
+                        {
+                            score: parseFloat(inputs[key]),
 
-    }
+                            type: key.slice(-2),
+                        },
+                    ],
+                });
+        }
+        const dataUpdate = {
+            schoolYearId: schoolYearContext,
+            semesterId: semesterContext,
+            studentScores: studentScores,
+        };
+        console.log(dataUpdate);
+        const { data } = await axios.post("inputscores", dataUpdate);
+        console.log(data);
+    };
     return (
         <View style={styles.container}>
             <FlatList
