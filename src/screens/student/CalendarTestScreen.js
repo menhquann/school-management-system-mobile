@@ -65,7 +65,8 @@ export default function CalendarDetail() {
         for (var i = 0; i < count; i++) {
           schoolYearArray.push({
             value: res[i].classId,
-            label: res[i].clazz,
+            label: `Lớp ${res[i].clazz}`,
+
           });
         }
         setListSchoolYear(
@@ -459,7 +460,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 0.5,
     borderRadius: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
     marginBottom: 5,
     // padding: 16,
   },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     Alert,
     ScrollView,
@@ -11,89 +11,201 @@ import {
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
+import { MAPSUBJECTS } from '../../Constants';
+import { useNavigation } from '@react-navigation/native';
 // import {BASE_URL, API_KEY} from '@env';
-
+import AuthContext from '../../context/AuthProvider';
 const ResultScreen = () => {
-    const [countryData, setCountryData] = useState([]);
-    const [stateData, setStateData] = useState([]);
-    const [cityData, setCityData] = useState([]);
-    const [country, setCountry] = useState(1);
-    const [state, setState] = useState(1);
-    const [city, setCity] = useState(null);
-    const [countryName, setCountryName] = useState("Năm học 2022-2023");
-    const [stateName, setStateName] = useState("Học kì 1");
-    const [cityName, setCityName] = useState(null);
+
+    const { setSchoolYearContext, setClazzContext, setSemesterContext, setTypeScoreContext } = useContext(AuthContext);
+    const [listSchoolYear, setListSchoolYear] = useState([]);
+    const [listClass, setListClass] = useState([]);
+    const [learningResult, setLearningResult] = useState();
+
+    const [schoolYear, setSchoolYear] = useState(1);
+    const [clazz, setClazz] = useState(1);
+    // const [class, setClass] = useState(1);
+    const [semester, setSemester] = useState(1);
+    const [typeScore, setTypeScore] = useState("A1");
+    const [schoolYearName, setSchoolYearName] = useState("Năm học 2022-2023");
+    const [semesterName, setSemesterName] = useState("Học kì 1");
+
     const [isFocus, setIsFocus] = useState(false);
+
+    const navigation = useNavigation()
+    console.log("map", "Civic Education".replace(" ", "_"))
+    console.log("typeScore", typeScore)
     const data = {
-        country: [
-            { value: 1, label: "Năm học 2022-2023" },
-            { value: 2, label: "Năm học 2021-2022" },
-            { value: 3, label: "Năm học 2020-2021" },
-        ],
-        state: [
+        semester: [
             { value: 1, label: "Học kì 1" },
             { value: 2, label: "Học kì 2" },
-            { value: 3, label: "Cả năm" },
+            // { value: 2, label: "Cả năm" },
+        ],
+        typeScore: [
+            { value: "A1", label: "Điểm miệng lần 1" },
+            { value: "A2", label: "Điểm miệng lần 2" },
+            { value: "A3", label: "Điểm miệng lần 3" },
+            { value: "B1", label: "Điểm 15 phút lần 1" },
+            { value: "B2", label: "Điểm 15 phút lần 2" },
+            { value: "B3", label: "Điểm 15 phút lần 3" },
+            { value: "B4", label: "Điểm 15 phút lần 4" },
+            { value: "C1", label: "Điểm thục hành " },
+            { value: "D1", label: "Điểm 1 tiết lần 1" },
+            { value: "D2", label: "Điểm 1 tiết lần 2" },
+            { value: "D3", label: "Điểm 1 tiết lần 3" },
+            { value: "D4", label: "Điểm 1 tiết lần 4" },
+            { value: "E1", label: "Điểm cuối kì " },
+
+
         ],
     }
 
-    //   axios(config)
-    //     .then(response => {
-    //       console.log(JSON.stringify(response.data));
-    //       var count = Object.keys(response.data).length;
-    //       let countryArray = [];
-    //       for (var i = 0; i < count; i++) {
-    //         countryArray.push({
-    //           value: response.data[i].iso2,
-    //           label: response.data[i].name,
-    //         });
-    //       }
-    //       setCountryData(countryArray);
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //     });
-    // }, []);
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data } = await axios.get("schoolyear");
+                // console.log(data);
+                // console.log("test1");
+                let res = data.data.items.sort((a, b) => {
+                    const x = a.schoolYear;
+                    const y = b.schoolYear;
+                    if (x > y) {
+                        return -1;
+                    }
+                    if (x < y) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                console.log(res)
+                var count = Object.keys(res).length;
+                let schoolYearArray = [];
+                for (var i = 0; i < count; i++) {
+                    schoolYearArray.push({
+                        value: res[i].schoolYearId,
+                        label: `Năm ${res[i].schoolYear}`,
+
+                    });
+                }
+                setListSchoolYear(
+                    schoolYearArray
+                );
+                setSchoolYear(schoolYearArray[0].value)
+
+                const dataClass = await axios.get(`classes?schoolYearId=${schoolYearArray[0].value}`);
+                console.log("dataClass", dataClass);
+                // console.log("test1");
+                let resClass = dataClass.data.data.items.sort((a, b) => {
+                    const x = a.clazz;
+                    const y = b.clazz;
+                    if (x > y) {
+                        return 1;
+                    }
+                    if (x < y) {
+                        return -1;
+                    }
+                    return 0;
+                });
+                console.log("resClass", resClass)
+                var count = Object.keys(resClass).length;
+                let classArray = [];
+                for (var i = 0; i < count; i++) {
+                    // if (classArray.find((item) => (item?.value == resClass[i].classId)))
+                    classArray.push({
+                        value: resClass[i].classId,
+                        label: `Lớp ${resClass[i].clazz}`,
+
+                    });
+
+                }
+                // classArray = [... new { classArray }]
+                console.log("classArray", new Set(classArray))
+                setListClass(
+                    classArray
+                );
+                setClazz(classArray[0].value)
 
 
-    // const handleCity = (countryCode, stateCode) => {
-    //   var config = {
-    //     method: 'get',
-    //     url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
-    //     headers: {
-    //       'X-CSCAPI-KEY': API_KEY,
-    //     },
-    //   };
 
-    //   axios(config)
-    //     .then(function (response) {
-    //       console.log(JSON.stringify(response.data));
-    //       var count = Object.keys(response.data).length;
-    //       let cityArray = [];
-    //       for (var i = 0; i < count; i++) {
-    //         cityArray.push({
-    //           value: response.data[i].id,
-    //           label: response.data[i].name,
-    //         });
-    //       }
-    //       setCityData(cityArray);
-    //     })
-    //     .catch(function (error) {
-    //       console.log(error);
-    //     });
-    // };
-    const res = [1, 2, 3]
+
+
+            } catch (e) { }
+        })();
+    }, []);
+    console.log("test 2");
+
+
+
+    const handleOnChangeYear = async (schoolYearId) => {
+        const dataClass = await axios.get(`classes?schoolYearId=${schoolYearId}`);
+        console.log("dataClass", dataClass);
+        let resClass = dataClass.data.data.items.sort((a, b) => {
+            const x = a.clazz;
+            const y = b.clazz;
+            if (x > y) {
+                return 1;
+            }
+            if (x < y) {
+                return -1;
+            }
+            return 0;
+        });
+        console.log("resClass", resClass)
+        var count = Object.keys(resClass).length;
+        let classArray = [];
+        if (count == 0) {
+            classArray.push({
+                value: 0,
+                label: `Không có dữ liệu năm học này`,
+
+            });
+        }
+        else {
+            for (var i = 0; i < count; i++) {
+                // if (classArray.find((item) => (item?.value == resClass[i].classId)))
+                classArray.push({
+                    value: resClass[i].classId,
+                    label: `Lớp ${resClass[i].clazz}`,
+
+                });
+
+            }
+        }
+
+        setListClass(
+            classArray
+        );
+        setClazz(classArray[0].value)
+
+    }
+
+    const handleSubmit = () => {
+
+        setSchoolYearContext(schoolYear)
+        setClazzContext(clazz)
+        setSemesterContext(semester)
+        setTypeScoreContext(typeScore)
+
+        navigation.push("Scores")
+    }
+
     return (
         <ScrollView>
 
             <View style={styles.container}>
-                <StatusBar barStyle="light-content" />
+                {/* <StatusBar barStyle="light-content" /> */}
                 <View style={{
-                    // backgroundColor: '#fff',
-                    paddingTop: 20,
+                    flex: 1,
+                    // flexDirection: "row",
+                    backgroundColor: '#fff',
+                    paddingTop: 5,
+                    paddingBottom: 10,
                     paddingLeft: 20,
                     paddingRight: 20,
-                    borderRadius: 15
+                    borderRadius: 15,
+                    borderColor: 'gray',
+                    borderWidth: 0.5,
+                    borderRadius: 8,
                 }}>
                     <Dropdown
                         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
@@ -101,21 +213,48 @@ const ResultScreen = () => {
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
                         iconStyle={styles.iconStyle}
-                        data={data.country}
+                        data={listSchoolYear}
+                        // data={data.country}
                         // search
                         maxHeight={300}
                         labelField="label"
                         valueField="value"
                         // placeholder={!isFocus ? 'Select country' : '...'}
                         searchPlaceholder="Search..."
-                        value={country}
+                        value={schoolYear}
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
                         onChange={item => {
-                            setCountry(item.value);
-                            console.log(country);
-                            // handleState(item.value);
-                            setCountryName(item.label);
+                            setSchoolYear(item.value);
+                            setSchoolYearName(item.label);
+                            handleOnChangeYear(item.value);
+                            // setLearningResult()
+                            setIsFocus(false);
+                        }}
+                    />
+
+                    <Dropdown
+                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={listClass}
+                        // search
+                        // maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        // placeholder={!isFocus ? 'Select state' : '...'}
+                        // searchPlaceholder="Search..."
+                        value={clazz}
+                        // select
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+
+                        onChange={item => {
+                            setClazz(item.value);
+                            // handleCity(country, item.value);
+                            // setSemesterName(item.label);
                             setIsFocus(false);
                         }}
                     />
@@ -125,169 +264,126 @@ const ResultScreen = () => {
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
                         iconStyle={styles.iconStyle}
-                        data={data.state}
+                        data={data.semester}
                         // search
-                        maxHeight={300}
+                        // maxHeight={300}
                         labelField="label"
                         valueField="value"
                         // placeholder={!isFocus ? 'Select state' : '...'}
                         // searchPlaceholder="Search..."
-                        value={state}
+                        value={semester}
                         // select
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
 
                         onChange={item => {
-                            setState(item.value);
+                            setSemester(item.value);
                             // handleCity(country, item.value);
-                            setStateName(item.label);
+                            setSemesterName(item.label);
                             setIsFocus(false);
                         }}
                     />
-                    {/* <Dropdown
-                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
-                    data={data.state}
-                    search
-                    maxHeight={300}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={!isFocus ? 'Select city' : '...'}
-                    searchPlaceholder="Search..."
-                    value={city}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                        setCity(item.value);
-                        setCityName(item.label);
-                        setIsFocus(false);
-                    }}
-                /> */}
-                    {/* <TouchableOpacity
-                    style={{
-                        backgroundColor: '#0F3460',
-                        padding: 20,
-                        borderRadius: 15,
-                        alignItems: 'center',
-                    }}
-                    onPress={() =>
-                        Alert.alert(
-                            `You have selected\nCountry: ${countryName}\nState: ${stateName}\nCity: ${cityName}`,
-                        )
-                    }>
-                    <Text
-                        style={{
-                            color: '#fff',
-                            textTransform: 'uppercase',
-                            fontWeight: '600',
-                        }}>
-                        Submit
-                    </Text>
-                </TouchableOpacity> */}
+                    <Dropdown
+                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={[{
+                            value: 1,
+                            label: `Môn`,
+                        }]}
+                        disable
+                        // search
+                        // maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        // placeholder={!isFocus ? 'Select state' : '...'}
+                        // searchPlaceholder="Search..."
+                        value={1}
+                        // select
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+
+                        onChange={item => {
+                            setClazz(item.value);
+                            // handleCity(country, item.value);
+                            // setSemesterName(item.label);
+                            setIsFocus(false);
+                        }}
+                    />
+                    <Dropdown
+                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={data.typeScore}
+                        // search
+                        // maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        // placeholder={!isFocus ? 'Select state' : '...'}
+                        // searchPlaceholder="Search..."
+                        value={typeScore}
+                        // select
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+
+                        onChange={item => {
+                            setTypeScore(item.value);
+                            // handleCity(country, item.value);
+                            // setSemesterName(item.label);
+                            setIsFocus(false);
+                        }}
+                    />
+
+
 
 
                 </View>
 
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        onPress={handleSubmit}
+                        style={styles.button}
+                    >
+                        <Text style={styles.buttonText}>Nhập điểm</Text>
+                    </TouchableOpacity>
+                </View>
 
-                <TableView appearance="light" style={{
-                    padding: 0,
-                    margin: 0,
-                }}>
-                    <Section sectionPaddingBottom={0} marginBottom={10}>
-                        <Cell cellStyle="RightDetail" title="Tb các môn" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Học lực" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Hạnh kiểm" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Danh hiệu" detail="Chưa có" />
-
-
-                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                    </Section>
-                    <Section header='Toán học' sectionPaddingBottom={0} headerTextStyle={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: "#000000"
-                    }}>
-                        <Cell cellStyle="RightDetail" title="Miệng:" detail={res.join(" ")} />
-                        <Cell cellStyle="RightDetail" title="15 phút:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="1 tiết:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Học kì:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="TBM:" detail="Chưa có" />
-
-                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                    </Section>
-                    <Section header='Vật lý' sectionPaddingBottom={0} headerTextStyle={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: "#000000"
-                    }}>
-                        <Cell cellStyle="RightDetail" title="Miệng:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="15 phút:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="1 tiết:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Học kì:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="TBM:" detail="Chưa có" />
-
-                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                    </Section>
-                    <Section header='Hóa học' sectionPaddingBottom={0} headerTextStyle={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: "#000000"
-                    }}>
-                        <Cell cellStyle="RightDetail" title="Miệng:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="15 phút:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="1 tiết:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Học kì:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="TBM:" detail="Chưa có" />
-
-                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                    </Section>
-                    <Section header='Sinh học' sectionPaddingBottom={0} headerTextStyle={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: "#000000"
-                    }}>
-                        <Cell cellStyle="RightDetail" title="Miệng:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="15 phút:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="1 tiết:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="Học kì:" detail="Chưa có" />
-                        <Cell cellStyle="RightDetail" title="TBM:" detail="Chưa có" />
-
-                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
-                    </Section>
-                </TableView>
 
 
 
             </View >
-        </ScrollView>
+        </ScrollView >
     );
 };
+
 
 export default ResultScreen;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
+        justifyContent: 'center',
+        // alignItems: 'center',
 
         // flexDirection: 'row',
-        backgroundColor: '#FFFFFF',
+        // backgroundColor: '#FFFFFF',
         // padding: 16,
         // justifyContent: 'center',
         // alignContent: 'center',
     },
     dropdown: {
         flex: 1,
-        height: 50,
+        height: 60,
         borderColor: 'gray',
         borderWidth: 0.5,
         borderRadius: 8,
-        // paddingHorizontal: 8,
+        paddingHorizontal: 4,
         marginBottom: 10,
-        // padding: 16,
+        padding: 16,
     },
     icon: {
         marginRight: 5,
@@ -315,6 +411,25 @@ const styles = StyleSheet.create({
     },
     inputSearchStyle: {
         height: 40,
+        fontSize: 16,
+    },
+    buttonContainer: {
+        flex: 1,
+        width: '60%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 40,
+    },
+    button: {
+        backgroundColor: '#0782F9',
+        width: '100%',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: '700',
         fontSize: 16,
     },
 });

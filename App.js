@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import ChangePasswordScreen from './src/screens/ChangePasswordScreen';
+import Scores from './src/screens/teacher/Scores';
 import HomeScreen from './src/screens/HomeScreen';
 import { AuthProvider } from './src/context/AuthProvider';
 import MainContainerST from './src/component/MainContainerST';
@@ -33,7 +34,20 @@ export default function App() {
               headerTitleStyle: {
                 fontWeight: 'bold',
               },
-            }} name="ChangePassword" component={ChangePasswordScreen} />
+            }}
+              name="ChangePassword" component={ChangePasswordScreen} />
+            <Stack.Screen style={{ flex: 1 }} options={{
+              title: 'Hệ Thống Quản Lý Trường Học',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#f4511e',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }}
+              name="Scores" component={Scores} />
             <Stack.Screen
               options={{
                 title: 'Hệ Thống Quản Lý Trường Học',

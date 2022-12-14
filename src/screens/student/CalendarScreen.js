@@ -65,7 +65,7 @@ export default function CalendarScreen() {
                 for (var i = 0; i < count; i++) {
                     schoolYearArray.push({
                         value: res[i].classId,
-                        label: res[i].clazz,
+                        label: `Lớp ${res[i].clazz}`,
                     });
                 }
                 setListSchoolYear(
@@ -282,7 +282,7 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
     //         "timeStart": null,
     //         "timeFinish": null,
     //         "roomName": null,
-    //         "subjectName": null,
+    //         "subjectName?": null,
     //         "calendarDate": "2022-10-20",
     //         "dayOfWeek": "Monday",
     //         "teacher": {
@@ -446,15 +446,15 @@ export function CalendarDetail({ dayOfWeek, apiData }) {
 
     apiData.filter((itemFilter) => itemFilter["dayOfWeek"] == dayOfWeek).map((item) => {
         if (item.lessonStart <= 5) {
-            dataMorning[item.lessonStart].title = MAPSUBJECTS[item.calendarEvent.replace(" ", "_")]
-            dataMorning[item.lessonStart].description = MAPSUBJECTS[item.calendarEvent.replace(" ", "_")]
+            dataMorning[item.lessonStart].title = MAPSUBJECTS[item.subjectName?.replace(" ", "_")]
+            dataMorning[item.lessonStart].description = `${item.teacher.lastName} ${item.teacher.firstName}`
             dataMorning[item.lessonStart].circleColor = 'rgb(0, 122, 255)'
             dataMorning[item.lessonStart].lineColor = 'rgb(0, 122, 255)'
             // circleColor: 'rgb(0, 122, 255)',
             // lineColor: 'rgb(0, 122, 255)'
         } else {
-            dataAfternoon[item.lessonStart - 5].title = MAPSUBJECTS[item.calendarEvent.replace(" ", "_")]
-            dataAfternoon[item.lessonStart - 5].description = MAPSUBJECTS[item.calendarEvent.replace(" ", "_")]
+            dataAfternoon[item.lessonStart - 5].title = MAPSUBJECTS[item.subjectName?.replace(" ", "_")]
+            dataAfternoon[item.lessonStart - 5].description = `${item.teacher.lastName} ${item.teacher.firstName}`
             dataAfternoon[item.lessonStart - 5].circleColor = 'rgb(0, 122, 255)'
             dataAfternoon[item.lessonStart - 5].lineColor = 'rgb(0, 122, 255)'
         }
@@ -630,7 +630,7 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 0.5,
         borderRadius: 8,
-        paddingHorizontal: 8,
+        paddingHorizontal: 4,
         // marginBottom: 10,
         // padding: 16,
     },

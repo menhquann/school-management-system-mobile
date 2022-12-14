@@ -27,6 +27,12 @@ const LoginScreen = () => {
       }
 
     );
+    // const { setAuth } = useContext(AuthContext);
+
+    // setSchoolYearContext(1)
+    // setClazzContext(2)
+    // setSemesterContext(3)
+    // setTypeScoreContext(4)
 
     console.log({ data });
 
@@ -36,7 +42,7 @@ const LoginScreen = () => {
     // setNavigate(lg);w
 
     console.log("compare", username.localeCompare("schooladmin1"))
-    if (!username.localeCompare("teacher2@thpthoanghoatham"))
+    if (!username.localeCompare("teacher3@thpthoanghoatham"))
       navigation.replace("HomeTE")
     else navigation.replace("HomeST")
   };

@@ -30,6 +30,7 @@ export default function CalendarDetail() {
   const [semesterName, setSemesterName] = useState("Học kì 1");
 
   const [apiData, setApiData] = useState([]);
+
   const [isFocus, setIsFocus] = useState(false);
 
   const data = {
@@ -44,12 +45,12 @@ export default function CalendarDetail() {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await axios.get("users/classes");
-        // console.log(data.data.learningResults);
+        const { data } = await axios.get("schoolyear");
+        // console.log(data);
         // console.log("test1");
-        let res = data.data.sort((a, b) => {
-          const x = a.clazz;
-          const y = b.clazz;
+        let res = data.data.items.sort((a, b) => {
+          const x = a.schoolYear;
+          const y = b.schoolYear;
           if (x > y) {
             return -1;
           }
@@ -63,8 +64,8 @@ export default function CalendarDetail() {
         let schoolYearArray = [];
         for (var i = 0; i < count; i++) {
           schoolYearArray.push({
-            value: res[i].classId,
-            label: res[i].clazz,
+            value: res[i].schoolYearId,
+            label: `Năm ${res[i].schoolYear}`,
           });
         }
         setListSchoolYear(
@@ -73,8 +74,8 @@ export default function CalendarDetail() {
         setSchoolYear(schoolYearArray[0].value)
         // var idClass = data.data[0].classId
         // console.log("dataaa1", idClass)
-        const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarType=Examination`);
-        console.log("apiinit", `users/calendar?classId=${schoolYearArray[0].value}&semesterId=1&calendarType=Examination`)
+        const dataCalendar = await axios.get(`users/calendar?schoolYearId=${schoolYearArray[0].value}&semesterId=1&calendarEventType=Meeting`);
+        console.log("apiinit", `users/calendar?schoolYearId=${schoolYearArray[0].value}&semesterId=1&calendarEventType=Meeting`)
         // apiData = (dataCalendar.data.data.items)
         setApiData(dataCalendar.data.data.items);
       } catch (e) { }
@@ -82,165 +83,40 @@ export default function CalendarDetail() {
   }, []);
 
   const handleLearningResult = async (schoolYearId, semesterId) => {
-    const dataCalendar = await axios.get(`users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarType=Examination`);
-    console.log("apicall", `users/calendar?classId=${schoolYearId}&semesterId=${semesterId}&calendarType=Examination`)
+    const dataCalendar = await axios.get(`users/calendar?schoolYearId=${schoolYearId}&semesterId=${semesterId}&calendarEventType=Meeting`);
+    console.log("apicall", `users/calendar?schoolYearId=${schoolYearId}&semesterId=${semesterId}&calendarEventType=Meeting`)
     // apiData = (dataCalendar.data.data.items)
     console.log("apicall", dataCalendar.data.data.items)
 
     setApiData(dataCalendar.data.data.items)
     // setLearningResult(dataLearningResult)
   }
-  const apiData2 = [
-    {
-      "calendarEventId": 11,
-      "calendarEvent": "Physic",
-      "calendarEventType": "Study",
-      "lessonStart": 6,
-      "lessonFinish": 7,
-      "timeStart": null,
-      "timeFinish": null,
-      "roomName": null,
-      "subjectName": null,
-      "calendarDate": "2022-10-20",
-      "dayOfWeek": "Monday",
-      "teacher": {
-        "id": 92,
-        "firstName": "Quân",
-        "lastName": "Ngô Đình "
-      },
-      "clazz": null
-    },
-    {
-      "calendarEventId": 14,
-      "calendarEvent": "Literature",
-      "calendarEventType": "Study",
-      "lessonStart": 1,
-      "lessonFinish": 1,
-      "timeStart": null,
-      "timeFinish": null,
-      "roomName": null,
-      "subjectName": "Literature",
-      "calendarDate": null,
-      "dayOfWeek": "Saturday",
-      "teacher": {
-        "id": 24,
-        "firstName": "Tu Quyen",
-        "lastName": "Dang Thi"
-      },
-      "clazz": null
-    },
-    {
-      "calendarEventId": 19,
-      "calendarEvent": "History",
-      "calendarEventType": "Study",
-      "lessonStart": 1,
-      "lessonFinish": 2,
-      "timeStart": "08:00",
-      "timeFinish": "09:00",
-      "roomName": null,
-      "subjectName": "History",
-      "calendarDate": null,
-      "dayOfWeek": "Thursday",
-      "teacher": {
-        "id": 24,
-        "firstName": "Tu Quyen",
-        "lastName": "Dang Thi"
-      },
-      "clazz": null
-    },
-    {
-      "calendarEventId": 25,
-      "calendarEvent": "Maths",
-      "calendarEventType": "Study",
-      "lessonStart": 1,
-      "lessonFinish": 1,
-      "timeStart": null,
-      "timeFinish": null,
-      "roomName": null,
-      "subjectName": "Maths",
-      "calendarDate": null,
-      "dayOfWeek": "Monday",
-      "teacher": {
-        "id": 27,
-        "firstName": "Ngọc",
-        "lastName": "Nguyễn Giáo"
-      },
-      "clazz": null
-    },
-    {
-      "calendarEventId": 20,
-      "calendarEvent": "Physic",
-      "calendarEventType": "Study",
-      "lessonStart": 7,
-      "lessonFinish": 7,
-      "timeStart": "08:00",
-      "timeFinish": "09:00",
-      "roomName": null,
-      "subjectName": "Geographic",
-      "calendarDate": null,
-      "dayOfWeek": "Friday",
-      "teacher": {
-        "id": 108,
-        "firstName": "Luận",
-        "lastName": "Nguyễn Văn"
-      },
-      "clazz": null
-    },
-    {
-      "calendarEventId": 10,
-      "calendarEvent": "English",
-      "calendarEventType": "Study",
-      "lessonStart": 1,
-      "lessonFinish": 1,
-      "timeStart": null,
-      "timeFinish": null,
-      "roomName": null,
-      "subjectName": null,
-      "calendarDate": "2022-10-20",
-      "dayOfWeek": "Tuesday",
-      "teacher": {
-        "id": 106,
-        "firstName": "Peter",
-        "lastName": "Parker"
-      },
-      "clazz": null
-    },
-    {
-      "calendarEventId": 3,
-      "calendarEvent": "Informatics",
-      "calendarEventType": "Study",
-      "lessonStart": 10,
-      "lessonFinish": 10,
-      "timeStart": null,
-      "timeFinish": null,
-      "roomName": null,
-      "subjectName": null,
-      "calendarDate": null,
-      "dayOfWeek": "Tuesday",
-      "teacher": {
-        "id": 78,
-        "firstName": "Huấn",
-        "lastName": "Nguyễn Văn"
-      },
-      "clazz": null
+
+  var dataCalendar = [
+
+    // { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
+
+
+  ]
+  console.log("sort ", apiData[0]?.calendarDate)
+  apiData.sort(
+    (a, b) => {
+      const x = a.calendarDate;
+      const y = b.calendarDate;
+      if (x > y) {
+        return 1;
+      }
+      if (x < y) {
+        return -1;
+      }
+      return 0;
     }
-  ]
-  const dataMorning = [
-
-    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
-    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
-    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
-    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
-    { time: '1-0-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
-    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
-    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
-    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
-    { time: '10-01-2001', title: 'Toán', description: 'A101', timeStart: '10:00 AM', timeFinish: '11:00 AM' },
-
-  ]
+  ).forEach(item => {
+    dataCalendar.push({ time: item.calendarDate, title: `${item.calendarEvent}`, description: `Phòng: ${item.roomName}`, timeStart: item.timeStart, timeFinish: item.timeFinish })
+  })
 
 
-  // console.log("data", dataMorning)
+  // console.log("data", dataCalendar)
   // console.log("dataApi", apiData)
 
   // var count = Object.keys(apiData).length;
@@ -333,7 +209,7 @@ export default function CalendarDetail() {
           <View >
             <Timeline
               style={styles.list}
-              data={dataMorning}
+              data={dataCalendar}
               circleSize={20}
               // circleColor="#bcbcbc"
               // lineColor="#bcbcbc"
@@ -449,7 +325,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 0.5,
     borderRadius: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
     marginBottom: 5,
     // padding: 16,
   },

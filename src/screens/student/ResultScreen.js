@@ -58,7 +58,7 @@ const ResultScreen = () => {
                 for (var i = 0; i < count; i++) {
                     schoolYearArray.push({
                         value: res[i].learningResultId,
-                        label: res[i].schoolYear,
+                        label: `Năm ${res[i].schoolYear}`,
                     });
                 }
                 setListSchoolYear(
@@ -204,7 +204,7 @@ const ResultScreen = () => {
                             <Section
                                 sectionPaddingBottom={0} marginBottom={10}
                                 roundedCorners={true} hideSurroundingSeparators={true}
-                                header={MAPSUBJECTS[item.subject.subject.replace(" ", "_")]}
+                                header={MAPSUBJECTS[item.subject.subject?.replace(" ", "_")]}
                                 // sectionPaddingBottom={10}
                                 headerTextStyle={{
                                     fontSize: 20,
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 0.5,
         borderRadius: 8,
-        paddingHorizontal: 8,
+        paddingHorizontal: 4,
         // marginBottom: 10,
         // padding: 16,
     },
