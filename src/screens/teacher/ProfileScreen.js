@@ -13,6 +13,7 @@ import {
 } from 'react-native-paper';
 
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
+import { MAPSUBJECTS } from '../../Constants';
 import AuthContext from '../../context/AuthProvider';
 
 
@@ -23,7 +24,7 @@ const CustomSectionHeader = () => (
     </View>
 );
 export default function ProfileScreen() {
-    const { auth } = useContext(AuthContext)
+    const { setTeachSubjectContext, auth } = useContext(AuthContext)
     axios.defaults.baseURL = "http://ndkiet.us-east-1.elasticbeanstalk.com/api/";
     const token = auth.data.access_token
 
@@ -42,6 +43,8 @@ export default function ProfileScreen() {
     const [district, setDistrict] = useState("");
     const [city, setCity] = useState("");
 
+    const [teachSubject, setTeachSubject] = useState("");
+    // const { setTeachSubjectContext } = useContext(AuthContext);
 
 
     useEffect(() => {
@@ -62,6 +65,8 @@ export default function ProfileScreen() {
                 setStreet(data.data.user.street);
                 setDistrict(data.data.user.district);
                 setCity(data.data.user.city);
+                setTeachSubject(data.data.user.teachSubject);
+                setTeachSubjectContext(data.data.user.teachSubject);
 
             } catch (e) { }
         })();
@@ -105,6 +110,7 @@ export default function ProfileScreen() {
                                 marginTop: 10,
                                 marginBottom: 5,
                             }]}>{displayName}</Title>
+                            <Caption style={styles.caption}>{`Bộ môn: ${MAPSUBJECTS[teachSubject.replace(" ", "_")]}`}</Caption>
                             <Caption style={styles.caption}>{schoolName}</Caption>
                         </View>
                     </View>

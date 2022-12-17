@@ -126,7 +126,7 @@ const ResultScreen = () => {
                 setData(data)
             } catch (e) { }
         })();
-    }, []);
+    }, [data]);
 
     return (
         <ScrollView>
@@ -169,10 +169,10 @@ const ResultScreen = () => {
                                     color: "#000000"
                                 }}>
                                 {console.log(item?.scores?.filter((score) => (score.type[0] == "A")).map((score) => (score.score)).join(" "))}
-                                <Cell cellStyle="RightDetail" title="Miệng:" detail={item?.scores?.filter((score) => (score.type[0] == "A")).map((score) => (score.score)).join(" ")} />
-                                <Cell cellStyle="RightDetail" title="15 phút:" detail={item?.scores?.filter((score) => (score.type[0] == "B")).map((score) => (score.score)).join(" ")} />
-                                <Cell cellStyle="RightDetail" title="1 tiết:" detail={item?.scores?.filter((score) => (score.type[0] == "D")).map((score) => (score.score)).join(" ")} />
-                                <Cell cellStyle="RightDetail" title="Học kì:" detail={item?.scores?.filter((score) => (score.type[0] == "E")).map((score) => (score.score)).join(" ")} />
+                                <Cell cellStyle="RightDetail" title="Miệng:" detail={item?.scores?.filter((score) => (score.type[0] == "A")).map((score) => (score.score)).join("   ")} />
+                                <Cell cellStyle="RightDetail" title="15 phút:" detail={item?.scores?.filter((score) => (score.type[0] == "B")).map((score) => (score.score)).join("   ")} />
+                                <Cell cellStyle="RightDetail" title="1 tiết:" detail={item?.scores?.filter((score) => (score.type[0] == "D")).map((score) => (score.score)).join("   ")} />
+                                <Cell cellStyle="RightDetail" title="Học kì:" detail={item?.scores?.filter((score) => (score.type[0] == "E")).map((score) => (score.score)).join("   ")} />
                                 <Cell cellStyle="RightDetail" title="TBM:" detail={""} />
 
                                 {/* <Section headerComponent={<CustomSectionHeader />}> */}

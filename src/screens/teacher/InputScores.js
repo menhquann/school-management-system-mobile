@@ -12,7 +12,7 @@ export default function App() {
     const [password, setPassword] = useState('')
 
     const [data, setData] = useState([])
-
+    console.log("aaaaaaaaaaaaaaaa")
     const handleChange = (value, name) => {
         // const name = event.target.name;
         // const value = e.target.value;
@@ -75,6 +75,7 @@ export default function App() {
         ]
     }
 
+    const [text, onChangeText] = React.useState("Useless Text");
 
     useEffect(() => {
         (async () => {
@@ -140,29 +141,62 @@ export default function App() {
             semesterId: semesterContext,
             studentScores: studentScores,
         };
-        console.log(dataUpdate);
-        const { data } = await axios.post("inputscores", dataUpdate);
-        console.log(data);
+        // console.log(dataUpdate);
+        await axios.post("inputscores", dataUpdate);
+
+        // const { data } = await axios.get(`examresults/class?schoolYearId=${schoolYearContext}&semesterId=${semesterContext}&classId=${clazzContext}`);
+        // // console.log("abc", data)
+        // const tempInputs = {}
+        // const tempData = []
+        // data.data.examResults.forEach(element => {
+        //     tempData.push({
+        //         id: element.student.studentId,
+        //         name: `${element.student.lastName} ${element.student.firstName}`
+        //     })
+        //     element.scores.forEach(element2 => {
+        //         tempInputs[`${element.student.studentId}${element2.type}`] = element2.score
+        //     })
+        // });
+        // console.log("tempInputs", tempInputs)
+        // setInputs(tempInputs)
+
+        // setData(tempData.sort(
+        //     (a, b) => {
+        //         const x = a.id;
+        //         const y = b.id;
+
+        //         return x - y;
+        //     }
+        // )
+        // )
+        // console.log(data);
     };
     return (
         <View style={styles.container}>
             <FlatList
-                style={{ flex: 1 }}
+                // style={{ flex: 1 }}
                 data={data}
                 renderItem={({ item, index }) => <Item item={item} index={index} inputs={inputs} typeScoreContext={typeScoreContext}
                     handleChange={handleChange} />
                 }
             // keyExtractor={item => item.email}
             />
+            <TextInput
+                style={styles.input}
+                onChangeText={onChangeText}
+                value={text}
+            />
+
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={handleSubmit}
                     style={styles.button}
                 >
-                    <Text style={styles.buttonText}>Nhập điểm</Text>
+                    <Text style={styles.buttonText}>Lưu</Text>
                 </TouchableOpacity>
             </View>
         </View>
+
     );
 
 }
@@ -178,6 +212,7 @@ function Item({ item, index, handleChange, inputs, typeScoreContext }) {
                 value={inputs[`${item.id}${typeScoreContext}`] || ""}
                 onChangeText={(text) => handleChange(text, `${item.id}${typeScoreContext}`)}
                 style={styles.input}
+            // keyboardType="number-pad"
             />
         </View>
     );
@@ -187,7 +222,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F7F7F7',
-        marginTop: 60
+        marginTop: 10
     },
     listItem: {
         margin: 5,
@@ -205,10 +240,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(232, 240, 254)',
 
         paddingHorizontal: 15,
-        paddingVertical: 10,
+        // paddingVertical: 10,
         borderRadius: 10,
-        marginTop: 5,
-        width: 40
+        // marginTop: 5,
+        width: 60
     },
     buttonContainer: {
         flex: 1,
@@ -216,6 +251,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40,
+        marginLeft: 75
     },
     button: {
         backgroundColor: '#0782F9',

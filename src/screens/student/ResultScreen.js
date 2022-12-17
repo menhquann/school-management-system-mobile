@@ -180,8 +180,9 @@ const ResultScreen = () => {
                     }}
                 >
                     <Section sectionPaddingBottom={0} marginBottom={10} roundedCorners={true} hideSurroundingSeparators={true}>
+                        <Cell cellStyle="RightDetail" title="Lớp" detail={learningResult?.data.data.learningResult.className} />
                         <Cell cellStyle="RightDetail" title="Tb các môn" detail={learningResult?.data.data.learningResult.averageScore} />
-                        <Cell cellStyle="RightDetail" title="Học lực" detail={learningResult?.data.data.learningResult.averageScore} />
+                        {/* <Cell cellStyle="RightDetail" title="Học lực" detail={learningResult?.data.data.learningResult.averageScore} /> */}
                         <Cell cellStyle="RightDetail" title="Hạnh kiểm" detail={learningResult?.data.data.learningResult.conduct} />
                         <Cell cellStyle="RightDetail" title="Danh hiệu" detail={learningResult?.data.data.learningResult.learningGrade} />
 
@@ -204,7 +205,7 @@ const ResultScreen = () => {
                             <Section
                                 sectionPaddingBottom={0} marginBottom={10}
                                 roundedCorners={true} hideSurroundingSeparators={true}
-                                header={MAPSUBJECTS[item.subject.subject?.replace(" ", "_")]}
+                                header={MAPSUBJECTS[item.subject.subjectName?.replace(" ", "_")]}
                                 // sectionPaddingBottom={10}
                                 headerTextStyle={{
                                     fontSize: 20,
@@ -212,13 +213,17 @@ const ResultScreen = () => {
                                     color: "#000000"
                                 }}>
                                 {/* {console.log(item.semesters[0].exams[1].score)} */}
-                                <Cell cellStyle="RightDetail" title="Miệng:" detail={item?.semesters[semester]?.exams[0].scores.join(" ")} />
+                                {/* <Cell cellStyle="RightDetail" title="Miệng:" detail={item?.semesters[semester]?.exams[0].scores.join(" ")} />
                                 <Cell cellStyle="RightDetail" title="15 phút:" detail={item?.semesters[semester]?.exams[1].scores.join(" ")} />
                                 <Cell cellStyle="RightDetail" title="1 tiết:" detail={item?.semesters[semester]?.exams[2].scores.join(" ")} />
                                 <Cell cellStyle="RightDetail" title="Học kì:" detail={item?.semesters[semester]?.exams[3].scores.join(" ")} />
-                                <Cell cellStyle="RightDetail" title="TBM:" detail={item?.semesters[semester]?.averageScore} />
-
-                                {/* <Section headerComponent={<CustomSectionHeader />}> */}
+                                <Cell cellStyle="RightDetail" title="TBM:" detail={item?.semesters[semester]?.averageScore} /> */}
+                                <Cell cellStyle="RightDetail" title="Miệng:" detail={item?.semesterScores[semester]?.scores?.filter((score) => (score.type[0] == "A")).map((score) => (score.score)).join("   ")} />
+                                <Cell cellStyle="RightDetail" title="15 phút:" detail={item?.semesterScores[semester]?.scores?.filter((score) => (score.type[0] == "B")).map((score) => (score.score)).join("   ")} />
+                                <Cell cellStyle="RightDetail" title="1 tiết:" detail={item?.semesterScores[semester]?.scores?.filter((score) => (score.type[0] == "D")).map((score) => (score.score)).join("   ")} />
+                                <Cell cellStyle="RightDetail" title="Học kì:" detail={item?.semesterScores[semester]?.scores?.filter((score) => (score.type[0] == "E")).map((score) => (score.score)).join("   ")} />
+                                <Cell cellStyle="RightDetail" title="TBM:" detail={item?.semesterScores[semester]?.avgScore} />
+                                {/* {/* <Section headerComponent={<CustomSectionHeader />}> */}
                             </Section>
 
                         ))}

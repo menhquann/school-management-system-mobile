@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../context/AuthProvider';
 const ResultScreen = () => {
 
-    const { setSchoolYearContext, setClazzContext, setSemesterContext, setTypeScoreContext } = useContext(AuthContext);
+    const { teachSubjectContext, setSchoolYearContext, setClazzContext, setSemesterContext, setTypeScoreContext } = useContext(AuthContext);
     const [listSchoolYear, setListSchoolYear] = useState([]);
     const [listClass, setListClass] = useState([]);
     const [learningResult, setLearningResult] = useState();
@@ -31,6 +31,7 @@ const ResultScreen = () => {
     const [semesterName, setSemesterName] = useState("Học kì 1");
 
     const [isFocus, setIsFocus] = useState(false);
+    // const { teachSubjectContext } = useContext(AuthContext);
 
     const navigation = useNavigation()
     console.log("map", "Civic Education".replace(" ", "_"))
@@ -291,7 +292,7 @@ const ResultScreen = () => {
                         iconStyle={styles.iconStyle}
                         data={[{
                             value: 1,
-                            label: `Môn`,
+                            label: `${MAPSUBJECTS[teachSubjectContext.replace(" ", "_")]}`,
                         }]}
                         disable
                         // search
@@ -414,11 +415,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     buttonContainer: {
-        flex: 1,
+        // flex: 1,
         width: '60%',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40,
+        marginLeft: 75
     },
     button: {
         backgroundColor: '#0782F9',

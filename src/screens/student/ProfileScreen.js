@@ -13,6 +13,7 @@ import {
 } from 'react-native-paper';
 
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
+import { MAPSUBJECTS } from '../../Constants';
 import AuthContext from '../../context/AuthProvider';
 
 
@@ -41,6 +42,7 @@ export default function ProfileScreen() {
     const [street, setStreet] = useState("");
     const [district, setDistrict] = useState("");
     const [city, setCity] = useState("");
+    const [teachSubject, setTeachSubject] = useState("");
 
 
 
@@ -62,6 +64,7 @@ export default function ProfileScreen() {
                 setStreet(data.data.user.street);
                 setDistrict(data.data.user.district);
                 setCity(data.data.user.city);
+                setTeachSubject(data.data.user.teachSubject);
 
             } catch (e) { }
         })();
