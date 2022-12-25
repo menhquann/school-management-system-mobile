@@ -6,47 +6,77 @@ import { Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpac
 
 import AuthContext from '../context/AuthProvider';
 import Background from './Background';
+import jwt_decode from "jwt-decode";
+import Toast from 'react-native-toast-message';
 axios.defaults.baseURL = "http://ndkiet.us-east-1.elasticbeanstalk.com/api/";
 const LoginScreen = () => {
   const { setAuth } = useContext(AuthContext);
   const [username, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const [navigate, setNavigate] = useState("");
   const navigation = useNavigation()
 
-
+  const showToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Đăng nhập thành công',
+      // text2: 'This is some something 👋'
+    });
+  }
   const handleLogin = async (e) => {
     e.preventDefault();
     console.log(username)
     console.log(password)
-    const { data } = await axios.post(
-      "login",
-      {
-        username,
-        password,
-      }
+    try {
+      const { data } = await axios.post(
+        "login",
+        {
+          username,
+          password,
+        }
 
-    );
-    // const { setAuth } = useContext(AuthContext);
+      );
 
-    // setSchoolYearContext(1)
-    // setClazzContext(2)
-    // setSemesterContext(3)
-    // setTypeScoreContext(4)
+      Toast.show({
+        type: 'success',
+        text1: 'Đăng nhập thành công!',
+        visibilityTime: 2000,
+        // text2: 'This is some something 👋'
+      });
+      console.log({ data });
 
-    console.log({ data });
+      setAuth({ data });
+      // 
+      const role = (jwt_decode(data.access_token)?.roles[0]);
 
-    setAuth({ data });
-    // 
+      // setNavigate(lg);w
 
-    // setNavigate(lg);w
+      console.log("role", jwt_decode(data.access_token)?.roles[0])
+      if (role === "TEACHER")
+        navigation.replace("HomeTE")
 
-    console.log("compare", username.localeCompare("schooladmin1"))
-    if (!username.localeCompare("teacher3@thpthoanghoatham"))
-      navigation.replace("HomeTE")
-    else navigation.replace("HomeST")
+      else if (role === "STUDENT") navigation.replace("HomeST")
+      else Toast.show({
+        type: 'error',
+        text1: 'Đăng nhập thất bại!',
+        text2: 'Tài khoản hoặc mật khẩu không chính xác!',
+        visibilityTime: 3500,
+        // autoHide: true
+      });
+    }
+    catch (e) {
+      Toast.show({
+        type: 'error',
+        text1: 'Đăng nhập thất bại!',
+        text2: 'Tài khoản hoặc mật khẩu không chính xác!',
+        visibilityTime: 3500,
+        // autoHide: true
+      });
+    }
+
+
   };
-
 
   return (
     <Background>

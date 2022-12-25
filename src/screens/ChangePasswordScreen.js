@@ -2,6 +2,9 @@ import { useNavigation } from '@react-navigation/core'
 import axios from "axios";
 import React, { useContext, useEffect, useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import Toast from 'react-native-toast-message';
+
+import { MAPERRORS } from '../Constants';
 // import { AsyncStorage } from '@react-native-community/async-strorage';
 
 import AuthContext from '../context/AuthProvider';
@@ -23,19 +26,41 @@ const LoginScreen = () => {
     e.preventDefault();
     // console.log(currentPassword)
     // console.log(password)
-    const { data } = await axios.put(
-      "user/password",
-      {
-        currentPassword,
-        newPassword,
-        confirmPassword,
-      }
+    try {
+      const { errorDTOs } = await axios.put(
+        "users/password",
+        {
+          currentPassword,
+          newPassword,
+          confirmPassword,
+        }
 
-    );
+      );
 
-    console.log({ data });
-    navigation.goBack();
-    //  {}handle nativa
+      Toast.show({
+        type: 'success',
+        text1: 'Đổi mật khẩu thành công!',
+        // text2: 'This is some something 👋',
+        visibilityTime: 2000,
+      });
+      navigation.goBack();
+      //  {}handle nativa
+
+    } catch (error) {
+      console.log("error 400", error.response);
+      const key = error.response.data.errorDTOs[0].key
+      const value = error.response.data.errorDTOs[0].value
+
+
+      Toast.show({
+        type: 'error',
+        text1: 'Đổi mật khẩu thất bại!',
+        text2: `${MAPERRORS[key]} ${MAPERRORS[value]}`,
+        visibilityTime: 3500,
+      });
+
+    }
+
   };
 
 
@@ -52,6 +77,7 @@ const LoginScreen = () => {
           value={currentPassword}
           onChangeText={text => setCurrentPassword(text)}
           style={styles.input}
+          secureTextEntry
         />
 
         <TextInput

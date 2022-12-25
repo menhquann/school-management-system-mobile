@@ -15,4 +15,13 @@ export const MAPSUBJECTS = {
     Physic: "Vật lý",
     Physical_Education: "Thể dục",
     Technology: "Tin học"
+
+}
+
+export const MAPERRORS = {
+    NewPassword: "Mật khẩu mới",
+    ConfirmPassword: "Nhập lại mật khẩu mới",
+    CurrentPassword: "Mật khẩu hiện tại",
+    MISSING_VALUE: "không được để trống!",
+    INVALID_VALUE: "không chính xác!"
 }

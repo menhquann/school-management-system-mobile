@@ -128,6 +128,7 @@ const ResultScreen = () => {
         })();
     }, [data]);
 
+
     return (
         <ScrollView>
 

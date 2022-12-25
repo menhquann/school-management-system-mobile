@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, TextInput } from 'react-native';
 import AuthContext from '../../context/AuthProvider';
+import Toast from 'react-native-toast-message';
 var type = "A1"
 export default function App() {
     const { schoolYearContext, clazzContext, semesterContext, typeScoreContext } = useContext(AuthContext);
@@ -18,7 +19,7 @@ export default function App() {
         // const value = e.target.value;
         console.log("name", name)
         console.log("value", value)
-        setInputs(values => ({ ...values, [name]: parseFloat(value) }))
+        setInputs(values => ({ ...values, [name]: (value) }))
     }
     const MOCK_DATA = {
         "clazz": {
@@ -91,7 +92,7 @@ export default function App() {
                         name: `${element.student.lastName} ${element.student.firstName}`
                     })
                     element.scores.forEach(element2 => {
-                        tempInputs[`${element.student.studentId}${element2.type}`] = element2.score
+                        tempInputs[`${element.student.studentId}${element2.type}`] = `${element2.score}`
                     })
                 });
                 console.log("tempInputs", tempInputs)
@@ -117,11 +118,22 @@ export default function App() {
         event.preventDefault();
         const studentScores = [];
         for (let key in inputs) {
+            if (parseFloat(inputs[key].replace(",", ".")) > 10) {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Điểm phải bé hơn 10!',
+                    // text2: 'Tài khoản hoặc mật khẩu không chính xác!',
+                    visibilityTime: 3500,
+                    // autoHide: true
+                });
+                return
+            }
             if (studentScores.find((item) => item?.studentId === key.slice(0, -2)))
+
                 studentScores
                     .find((item) => item?.studentId === key.slice(0, -2))
                     .scores.push({
-                        score: parseFloat(inputs[key]),
+                        score: (inputs[key]).replace(",", "."),
                         type: key.slice(-2),
                     });
             else
@@ -129,7 +141,7 @@ export default function App() {
                     studentId: key.slice(0, -2),
                     scores: [
                         {
-                            score: parseFloat(inputs[key]),
+                            score: (inputs[key]).replace(",", "."),
 
                             type: key.slice(-2),
                         },
@@ -141,9 +153,15 @@ export default function App() {
             semesterId: semesterContext,
             studentScores: studentScores,
         };
-        // console.log(dataUpdate);
+        console.log(dataUpdate);
         await axios.post("inputscores", dataUpdate);
-
+        Toast.show({
+            type: 'success',
+            text1: 'Nhập điểm thành công!',
+            // text2: 'Tài khoản hoặc mật khẩu không chính xác!',
+            visibilityTime: 2000,
+            // autoHide: true
+        });
         // const { data } = await axios.get(`examresults/class?schoolYearId=${schoolYearContext}&semesterId=${semesterContext}&classId=${clazzContext}`);
         // // console.log("abc", data)
         // const tempInputs = {}
@@ -173,19 +191,17 @@ export default function App() {
     };
     return (
         <View style={styles.container}>
-            <FlatList
-                // style={{ flex: 1 }}
-                data={data}
-                renderItem={({ item, index }) => <Item item={item} index={index} inputs={inputs} typeScoreContext={typeScoreContext}
-                    handleChange={handleChange} />
-                }
-            // keyExtractor={item => item.email}
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={onChangeText}
-                value={text}
-            />
+            <View style={{ flex: 9 }}>
+                <FlatList
+                    // style={{ flex: 1 }}
+                    data={data}
+                    renderItem={({ item, index }) => <Item item={item} index={index} inputs={inputs} typeScoreContext={typeScoreContext}
+                        handleChange={handleChange} />
+                    }
+                // keyExtractor={item => item.email}
+                />
+            </View>
+
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
@@ -202,17 +218,21 @@ export default function App() {
 }
 
 function Item({ item, index, handleChange, inputs, typeScoreContext }) {
-
+    { console.log(`${item.id}${typeScoreContext}`, inputs[`${item.id}${typeScoreContext}`]) }
     return (
+
         <View style={styles.listItem}>
             <View style={{ flex: 1 }}>
                 <Text style={{ fontWeight: "bold" }}>{`${index + 1}.${item.name}`}</Text>
             </View>
             <TextInput
-                value={inputs[`${item.id}${typeScoreContext}`] || ""}
-                onChangeText={(text) => handleChange(text, `${item.id}${typeScoreContext}`)}
                 style={styles.input}
-            // keyboardType="number-pad"
+                value={inputs[`${item.id}${typeScoreContext}`]}
+                // value={1}
+
+                onChangeText={(text) => handleChange(text, `${item.id}${typeScoreContext}`)}
+
+                keyboardType="numeric"
             />
         </View>
     );
@@ -250,10 +270,12 @@ const styles = StyleSheet.create({
         width: '60%',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 40,
+        marginTop: 20,
+        marginBottom: 20,
         marginLeft: 75
     },
     button: {
+        // flex: 1,
         backgroundColor: '#0782F9',
         width: '100%',
         padding: 15,

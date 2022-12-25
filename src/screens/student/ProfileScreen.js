@@ -126,8 +126,8 @@ export default function ProfileScreen() {
                         <Cell cellStyle="RightDetail" title="Giới tính" detail={gender ? "Nam" : "Nữ"} />
                         <Cell cellStyle="RightDetail" title="Ngày sinh" detail={dateOfBirth} />
                         <Cell cellStyle="RightDetail" title="Nơi sinh" detail={placeOfBirth} />
-                        <Cell cellStyle="RightDetail" title="Quốc tịch" detail={nationality} />
-                        <Cell cellStyle="RightDetail" title="Đường" detail={street} />
+                        {/* <Cell cellStyle="RightDetail" title="Quốc tịch" detail={nationality} /> */}
+                        <Cell cellStyle="RightDetail" title="Địa chỉ" detail={street} />
                         <Cell cellStyle="RightDetail" title="Quận/Huyện" detail={district} />
                         <Cell cellStyle="RightDetail" title="Tỉnh/Thành phố" detail={city} />
 

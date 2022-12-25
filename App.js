@@ -11,7 +11,7 @@ import { AuthProvider } from './src/context/AuthProvider';
 import MainContainerST from './src/component/MainContainerST';
 import MainContainerTE from './src/component/MainContainerTE';
 
-
+import Toast from 'react-native-toast-message';
 const Stack = createNativeStackNavigator();
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by messager
@@ -83,7 +83,7 @@ export default function App() {
       </View>
 
       {/* </ScrollView> */}
-
+      <Toast />
     </AuthProvider>
   );
 }
