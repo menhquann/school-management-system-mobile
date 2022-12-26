@@ -18,9 +18,9 @@ import AuthContext from '../../context/AuthProvider';
 
 
 // Example component for section:headerComponent
-const CustomSectionHeader = () => (
+const CustomSectionHeader = ({ name }) => (
     <View >
-        <Text style={styles.textHeader}>Thông tin chung</Text>
+        <Text style={styles.textHeader}>{name}</Text>
     </View>
 );
 export default function ProfileScreen() {
@@ -44,8 +44,25 @@ export default function ProfileScreen() {
     const [city, setCity] = useState("");
     const [teachSubject, setTeachSubject] = useState("");
 
+    const [dadFirstName, setDadFirstName] = useState("");
+    const [dadLastName, setDadLastName] = useState("");
+    const [dadDisplayName, setDadDisplayName] = useState("");
+    const [dadDayOfBirth, setDadDayOfBirth] = useState("");
+    const [dadPhone, setDadPhone] = useState("");
+    const [dadJob, setDadJob] = useState("");
+    const [dadStreet, setDadStreet] = useState("");
+    const [dadDistrict, setDadDistrict] = useState("");
+    const [dadCity, setDadCity] = useState("");
 
-
+    const [momFirstName, setMomFirstName] = useState("");
+    const [momLastName, setMomLastName] = useState("");
+    const [momDisplayName, setMomDisplayName] = useState("");
+    const [momPhone, setMomPhone] = useState("");
+    const [momDayOfBirth, setMomDayOfBirth] = useState("");
+    const [momJob, setMomJob] = useState("");
+    const [momStreet, setMomStreet] = useState("");
+    const [momDistrict, setMomDistrict] = useState("");
+    const [momCity, setMomCity] = useState("");
     useEffect(() => {
         (async () => {
             try {
@@ -65,35 +82,30 @@ export default function ProfileScreen() {
                 setDistrict(data.data.user.district);
                 setCity(data.data.user.city);
                 setTeachSubject(data.data.user.teachSubject);
+                const profileData = await axios.get("students/profile");
+                setDadFirstName(profileData.data.data.student.parents[0].firstName);
+                setDadLastName(profileData.data.data.student.parents[0].lastName);
+                setDadDisplayName(`${profileData.data.data.student.parents[0].lastName} ${profileData.data.data.student.parents[0].firstName} `);
+                setDadDayOfBirth(profileData.data.data.student.parents[0].dayOfBirth);
+                setDadPhone(profileData.data.data.student.parents[0].phone);
+                setDadJob(profileData.data.data.student.parents[0].job);
+                setDadStreet(profileData.data.data.student.parents[0].street);
+                setDadDistrict(profileData.data.data.student.parents[0].district);
+                setDadCity(profileData.data.data.student.parents[0].city);
+
+                setMomFirstName(profileData.data.data.student.parents[1].firstName);
+                setMomLastName(profileData.data.data.student.parents[1].lastName);
+                setMomDisplayName(`${profileData.data.data.student.parents[1].lastName} ${profileData.data.data.student.parents[1].firstName}`);
+                setMomPhone(profileData.data.data.student.parents[1].phone);
+                setMomDayOfBirth(profileData.data.data.student.parents[1].dayOfBirth);
+                setMomJob(profileData.data.data.student.parents[1].job);
+                setMomStreet(profileData.data.data.student.parents[1].street);
+                setMomDistrict(profileData.data.data.student.parents[1].district);
+                setMomCity(profileData.data.data.student.parents[1].city);
 
             } catch (e) { }
         })();
     }, []);
-
-
-    // const mockData = {
-    //     "userId": 68,
-    //     "username": "student1@thpthoanghoatham",
-    //     "lastName": "Nguyen Tran Minh",
-    //     "firstName": "Quan",
-    //     "displayName": "Nguyen Tran Minh Quan",
-    //     "phone": "123411",
-    //     "email": "ntmquan@gmail.com",
-    //     "avatar": null,
-    //     "gender": true,
-    //     "dateOfBirth": "2001-10-10",
-    //     "placeOfBirth": "Hue",
-    //     "nationality": "",
-    //     "street": "Ngo Si Lien",
-    //     "district": "Quan Lien Chieu",
-    //     "city": "Thanh pho Da Nang",
-    //     "job": "",
-    //     "role": "STUDENT",
-    //     "schoolId": 5,
-    //     "schoolName": "THPT Hoang Hoa Tham",
-    //     "studentId": "student1",
-    //     "teacherId": ""
-    // }
 
 
     return (
@@ -118,7 +130,7 @@ export default function ProfileScreen() {
                         margin: 0,
                         marginHorizontal: 15,
                     }}>
-                    <Section headerComponent={<CustomSectionHeader />}
+                    <Section headerComponent={<CustomSectionHeader name="Thông tin cá nhân" />}
                         roundedCorners={true} hideSurroundingSeparators={true}>
                         <Cell cellStyle="RightDetail" title="Họ và tên" detail={displayName} />
                         <Cell cellStyle="RightDetail" title="Số điện thoại" detail={phone} />
@@ -131,6 +143,29 @@ export default function ProfileScreen() {
                         <Cell cellStyle="RightDetail" title="Quận/Huyện" detail={district} />
                         <Cell cellStyle="RightDetail" title="Tỉnh/Thành phố" detail={city} />
 
+                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
+                    </Section>
+
+                    <Section headerComponent={<CustomSectionHeader name="Thông tin cha" />}
+                        roundedCorners={true} hideSurroundingSeparators={true}>
+                        <Cell cellStyle="RightDetail" title="Họ và tên" detail={dadDisplayName} />
+                        <Cell cellStyle="RightDetail" title="Số điện thoại" detail="0378844750" />
+                        <Cell cellStyle="RightDetail" title="Nghề nghiệp" detail={dadJob} />
+                        <Cell cellStyle="RightDetail" title="Địa chỉ" detail={dadStreet} />
+                        <Cell cellStyle="RightDetail" title="Quận/Huyện" detail={dadDistrict} />
+                        <Cell cellStyle="RightDetail" title="Tỉnh/Thành phố" detail={dadCity} />
+
+                        {/* <Section headerComponent={<CustomSectionHeader />}> */}
+                    </Section>
+
+                    <Section headerComponent={<CustomSectionHeader name="Thông tin mẹ" />}
+                        roundedCorners={true} hideSurroundingSeparators={true}>
+                        <Cell cellStyle="RightDetail" title="Họ và tên" detail={momDisplayName} />
+                        <Cell cellStyle="RightDetail" title="Số điện thoại" detail="0794433571" />
+                        <Cell cellStyle="RightDetail" title="Nghề nghiệp" detail={momJob} />
+                        <Cell cellStyle="RightDetail" title="Địa chỉ" detail={momStreet} />
+                        <Cell cellStyle="RightDetail" title="Quận/Huyện" detail={momDistrict} />
+                        <Cell cellStyle="RightDetail" title="Tỉnh/Thành phố" detail={momCity} />
                         {/* <Section headerComponent={<CustomSectionHeader />}> */}
                     </Section>
                 </TableView>

@@ -21,62 +21,6 @@ export default function App() {
         console.log("value", value)
         setInputs(values => ({ ...values, [name]: (value) }))
     }
-    const MOCK_DATA = {
-        "clazz": {
-            "classId": 1,
-            "className": "10/1"
-        },
-        "subject": {
-            "subjectId": 3,
-            "subject": "Chemistry"
-        },
-        "examResults": [
-            {
-                "student": {
-                    "studentId": 100,
-                    "lastName": "Ngô",
-                    "firstName": "San"
-                },
-                "scores": [
-                    {
-                        "score": 7.0,
-                        "type": "A1"
-                    },
-                    {
-                        "score": 8.0,
-                        "type": "B2"
-                    }
-                ]
-            },
-            {
-                "student": {
-                    "studentId": 102,
-                    "lastName": "Nguyễn",
-                    "firstName": "Huấn"
-                },
-                "scores": [
-                    {
-                        "score": 8.0,
-                        "type": "A1"
-                    },
-                    {
-                        "score": 10.0,
-                        "type": "C1"
-                    }
-                ]
-            },
-            {
-                "student": {
-                    "studentId": 104,
-                    "lastName": "Nguyễn Hữu",
-                    "firstName": "Hậu"
-                },
-                "scores": []
-            }
-        ]
-    }
-
-    const [text, onChangeText] = React.useState("Useless Text");
 
     useEffect(() => {
         (async () => {
@@ -154,44 +98,30 @@ export default function App() {
             studentScores: studentScores,
         };
         console.log(dataUpdate);
-        await axios.post("inputscores", dataUpdate);
-        Toast.show({
-            type: 'success',
-            text1: 'Nhập điểm thành công!',
-            // text2: 'Tài khoản hoặc mật khẩu không chính xác!',
-            visibilityTime: 2000,
-            // autoHide: true
-        });
-        // const { data } = await axios.get(`examresults/class?schoolYearId=${schoolYearContext}&semesterId=${semesterContext}&classId=${clazzContext}`);
-        // // console.log("abc", data)
-        // const tempInputs = {}
-        // const tempData = []
-        // data.data.examResults.forEach(element => {
-        //     tempData.push({
-        //         id: element.student.studentId,
-        //         name: `${element.student.lastName} ${element.student.firstName}`
-        //     })
-        //     element.scores.forEach(element2 => {
-        //         tempInputs[`${element.student.studentId}${element2.type}`] = element2.score
-        //     })
-        // });
-        // console.log("tempInputs", tempInputs)
-        // setInputs(tempInputs)
+        try {
+            await axios.post("inputscores", dataUpdate);
+            Toast.show({
+                type: 'success',
+                text1: 'Nhập điểm thành công!',
+                // text2: 'Tài khoản hoặc mật khẩu không chính xác!',
+                visibilityTime: 2000,
+                // autoHide: true
+            });
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Định dạng điểm không đúng!',
+                // text2: 'Tài khoản hoặc mật khẩu không chính xác!',
+                visibilityTime: 3500,
+                // autoHide: true
+            });
+        }
 
-        // setData(tempData.sort(
-        //     (a, b) => {
-        //         const x = a.id;
-        //         const y = b.id;
 
-        //         return x - y;
-        //     }
-        // )
-        // )
-        // console.log(data);
     };
     return (
         <View style={styles.container}>
-            <View style={{ flex: 9 }}>
+            <View style={{ flex: 5 }}>
                 <FlatList
                     // style={{ flex: 1 }}
                     data={data}
@@ -266,11 +196,11 @@ const styles = StyleSheet.create({
         width: 60
     },
     buttonContainer: {
-        flex: 1,
+        flex: 3,
         width: '60%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 20,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        paddingTop: 40,
         marginBottom: 20,
         marginLeft: 75
     },
