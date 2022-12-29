@@ -28,7 +28,7 @@ export default function App() {
               title: 'Hệ Thống Quản Lý Trường Học',
               headerTitleAlign: 'center',
               headerStyle: {
-                backgroundColor: '#f4511e',
+                backgroundColor: '#3c4b64',
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
@@ -40,7 +40,7 @@ export default function App() {
               title: 'Hệ Thống Quản Lý Trường Học',
               headerTitleAlign: 'center',
               headerStyle: {
-                backgroundColor: '#f4511e',
+                backgroundColor: '#3c4b64',
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
@@ -53,7 +53,7 @@ export default function App() {
                 title: 'Hệ Thống Quản Lý Trường Học',
                 headerTitleAlign: 'center',
                 headerStyle: {
-                  backgroundColor: '#f4511e',
+                  backgroundColor: '#3c4b64',
                 },
                 headerTintColor: '#fff',
                 headerTitleStyle: {
@@ -70,7 +70,7 @@ export default function App() {
                 title: 'Hệ Thống Quản Lý Trường Học',
                 headerTitleAlign: 'center',
                 headerStyle: {
-                  backgroundColor: '#f4511e',
+                  backgroundColor: '#3c4b64',
                 },
                 headerTintColor: '#fff',
                 headerTitleStyle: {

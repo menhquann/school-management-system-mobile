@@ -1,9 +1,8 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "eject": "expo eject"
   },
@@ -39,10 +38,13 @@
     "react-native-timeline-listview": "^0.2.3",
     "react-native-toast-message": "^2.1.5",
     "react-native-web": "~0.18.7",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "expo-splash-screen": "~0.16.2"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6"
   },
-  "private": true
+  "private": true,
+  "name": "PBL6_mobile",
+  "version": "1.0.0"
 }

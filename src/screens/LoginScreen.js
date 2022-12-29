@@ -88,7 +88,7 @@ const LoginScreen = () => {
           {/* <Text style={styles.logo}>SMS</Text> */}
           <Image
             style={styles.logo}
-            source={require("../assets/logo.png")}
+            source={require("../assets/1.png")}
           />
 
         </View>
